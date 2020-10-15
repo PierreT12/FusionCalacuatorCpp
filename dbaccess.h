@@ -15,7 +15,8 @@ public:
     QStringList GetAll(QSqlQuery query);
     Persona GetSinglePersona(QString indexName);
     QPixmap GetSinglePersonaImage(QString indexName);
-    QStringList GetInfo(QString name);
+    QStringList GetInfoStat(QString name);
+    QStringList GetInfoMagic(QString name);
 private:
     QSqlDatabase m_db;
 

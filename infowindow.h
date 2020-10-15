@@ -21,6 +21,10 @@ public:
     QStringList DataConnection();
     void AddToView(QStringList list);
     void SetTableViews();
+    void AddToUi(QStandardItemModel* models,
+                 QStringList list);
+    void AddToUiInfo(QStandardItemModel* models,
+                     QStringList list);
 
 
 

@@ -4,6 +4,7 @@
 
 QString m_path = "C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\SQL_FILES\\finaL_Database_3.db";
 
+
 //Connects to the database as soon as the program runs for the first time
 //Needs to be global to this class so other methods can call it
 //Otherwise server will keep randomly ending connections
@@ -18,7 +19,7 @@ InfoWindow::InfoWindow(QWidget *parent)
  AddToView(DataConnection());
  SetTableViews();
 
-//Move to its own method
+
 
 
 
@@ -62,6 +63,10 @@ void InfoWindow::TheClick (QModelIndex index)
     //Variables that'll get instanced in a hot sec
     Persona selection;
     QPixmap picture;
+    modelTableStat = new QStandardItemModel(5,2,this);
+    modelTableMagic = new QStandardItemModel(10,2,this);
+    QStringList stats;
+    QStringList magic;
     //Cast model to QStringModel
     QStringListModel* listModel= qobject_cast<QStringListModel*>(ui->personaView ->model());
 
@@ -80,6 +85,15 @@ void InfoWindow::TheClick (QModelIndex index)
     ui -> personaLevel->setText(level);
 
     ui->personaImage->setPixmap(picture);
+    SetTableViews();
+
+
+
+    stats = mainAccess.GetInfoStat(selection.m_name);
+    AddToUiInfo(modelTableStat,stats);
+    magic = mainAccess.GetInfoMagic(selection.m_name);
+    AddToUiInfo(modelTableMagic,magic);
+
 
 }
 
@@ -87,20 +101,90 @@ void InfoWindow::SetTableViews()
 {
     modelTableStat = new QStandardItemModel(5,2,this);
     modelTableMagic = new QStandardItemModel(10,2,this);
+    QStringList stats;
+    QStringList magic;
+    QStringList statBasic;
+    QStringList magicBasic;
 
+
+    stats <<"Stat" << "Value";
+    statBasic << "Strength" << "Magic"
+              << "Endurance" << "Agility"
+              << "Luck";
+    modelTableStat->setHorizontalHeaderLabels(stats);
 
     ui ->statView ->setModel(modelTableStat);
+    AddToUi(modelTableStat, statBasic);
+
+
+
+    magic <<"Magic" << "Value";
+    //This is just the names for right now
+    //Later will be the images
+    magicBasic <<"Physical" << "Gun"
+              <<"Fire" <<"Ice"
+              << "Elec" << "Wind"
+              << "Psych" << "Nuke"
+              << "Bless" << "Curse";
+    modelTableMagic->setHorizontalHeaderLabels(magic);
     ui ->magicView ->setModel(modelTableMagic);
-//   QStringList stat = mainAccess.GetInfo(ui->personaName->text());
-   //QStringList magic = mainAccess.GetInfo
-    for(int row = 0; row < 4; row++)
+    AddToUi(modelTableMagic, magicBasic);
+
+
+
+
+
+
+
+
+
+}
+
+void InfoWindow::AddToUi(QStandardItemModel* models,
+                         QStringList list)
+{
+
+
+
+    for(int row = 0; row < list.size(); row++)
+        {
+            int col = 0;
+
+
+
+
+            QModelIndex index
+   = models -> index(row, col, QModelIndex());
+
+            models->setData(index,list.at(row));
+
+        }
+
+
+
+
+}
+
+
+
+void InfoWindow::AddToUiInfo(QStandardItemModel* models,
+                             QStringList list)
+{
+
+
+
+    for(int row = 0; row < list.size(); row++)
         {
             int col = 1;
 
-            QModelIndex index
-   = modelTableStat->index(row,col,QModelIndex());
 
-            modelTableStat->setData(index,2);
+
+
+            QModelIndex index
+   = models -> index(row, col, QModelIndex());
+
+            models->setData(index,list.at(row));
+
 
         }
 

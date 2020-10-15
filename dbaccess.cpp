@@ -87,3 +87,57 @@ QPixmap DbAccess::GetSinglePersonaImage(QString indexName)
 return outPixmap;
 }
 
+QStringList DbAccess::GetInfoStat(QString name)
+{
+    //Creating List and Query
+    QStringList statInfo;
+    QSqlQuery query("SELECT Stats_Final.Strength, Stats_Final.Magic, Stats_Final.Endureance, Stats_Final.Agility, Stats_Final.Luck FROM Personas_Final INNER JOIN Stats_Final ON Stats_Final.Stat_ID = Personas_Final.Stat_ID WHERE Name =?");
+    query.addBindValue(name);
+
+    if(query.exec())
+    {
+
+        while(query.next())
+        {
+               statInfo.append(query.value(0).toString());
+               statInfo.append(query.value(1).toString());
+               statInfo.append(query.value(2).toString());
+               statInfo.append(query.value(3).toString());
+               statInfo.append(query.value(4).toString());
+        }
+    }
+
+
+    return statInfo;
+}
+
+
+
+QStringList DbAccess::GetInfoMagic(QString name)
+{
+    //Creating List and Query
+    QStringList magicInfo;
+    QSqlQuery query("SELECT Str_Wea_Final.Phys, Str_Wea_Final.Gun, Str_Wea_Final.Fire, Str_Wea_Final.Ice, Str_Wea_Final.Electric, Str_Wea_Final.Wind, Str_Wea_Final.Psych, Str_Wea_Final.Nuke, Str_Wea_Final.Bless, Str_Wea_Final.Curse FROM Personas_Final INNER JOIN Str_Wea_Final ON Str_Wea_Final.Str_Wea_ID = Personas_Final.Str_Wea_ID WHERE Name = ?");
+    query.addBindValue(name);
+
+    if(query.exec())
+    {
+
+        while(query.next())
+        {
+               magicInfo.append(query.value(0).toString());
+               magicInfo.append(query.value(1).toString());
+               magicInfo.append(query.value(2).toString());
+               magicInfo.append(query.value(3).toString());
+               magicInfo.append(query.value(4).toString());
+               magicInfo.append(query.value(5).toString());
+               magicInfo.append(query.value(6).toString());
+               magicInfo.append(query.value(7).toString());
+               magicInfo.append(query.value(8).toString());
+               magicInfo.append(query.value(9).toString());
+        }
+    }
+
+
+    return magicInfo;
+}
