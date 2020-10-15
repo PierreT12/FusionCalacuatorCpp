@@ -7,7 +7,7 @@ Because most of the logic has already been written in C#, I just took that and i
 
 # Current Features
 
-Displays Persona Information (Name, Acrana Level, Etc.) from database  
+Displays Persona Information (Name, Acrana Level, Stat, Magic Etc.) from database  
 Loads in images properly for each persona
 
 # Features that need to be reimplented
@@ -15,7 +15,7 @@ Loads in images properly for each persona
 Backwards Fusion  
 Settings Page  
 Search Function
-Stat & Magic Info  
+ 
 
 # Needs New Logic entirely
 
@@ -25,7 +25,7 @@ Treasure Demons
 Inhearited Skills  
 
 # Recent Changes
-
+Stat & Magic Info Added to the Info Page
 
 
 # Logic and Layout Inspirations:
