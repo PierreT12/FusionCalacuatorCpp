@@ -1,12 +1,12 @@
-# FusionCalacuatorCpp
-A remake of my C# Fusion Calcuator.
+# FusionCalculatorCpp
+A remake of my C# Fusion Calculator.
 
 This is a persona project that I was working on in C# but I needed to transfer over to C++ for my Graduate School Application.  
-Because most of the logic has already been written in C#, I just took that and impletented it in C++ and cleaned it up. All of the information relating to Personas is stored within a SQLite Database.
+Because most of the logic has already been written in C#, I just took that and implemented it in C++ and cleaned it up. All of the information relating to Personas is stored within a SQLite Database.
 
 # SQLite Database
 The database I made was too large to be uploaded to Github  
-So here's a [google drive](https://drive.google.com/file/d/1NNI8SEbtjX9Yu8piW7XSFhn0FfF9m5nS/view?usp=sharing) link to it  
+So here's a [Google Drive](https://drive.google.com/file/d/1NNI8SEbtjX9Yu8piW7XSFhn0FfF9m5nS/view?usp=sharing) link to it  
 
 # Current Features
 
@@ -14,7 +14,7 @@ Displays Persona Information (Name, Acrana Level, Stat, Magic Etc.) from databas
 Loads in images properly for each persona
 Can open Fusion Page
 
-# Features that need to be reimplented
+# Features that need to be reimplemented
 
 Backwards Fusion  
 Settings Page  
@@ -26,7 +26,7 @@ Search Function
 Forward Fusion  
 About Page
 Treasure Demons  
-Inhearited Skills  
+Inherited Skills  
 
 # Recent Changes
 Stat & Magic Info Added to the Info Page
