@@ -9,6 +9,7 @@ Because most of the logic has already been written in C#, I just took that and i
 
 Displays Persona Information (Name, Acrana Level, Stat, Magic Etc.) from database  
 Loads in images properly for each persona
+Can open Fusion Page
 
 # Features that need to be reimplented
 
