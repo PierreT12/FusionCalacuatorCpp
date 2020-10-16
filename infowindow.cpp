@@ -2,7 +2,9 @@
 #include "ui_infowindow.h"
 #include "dbaccess.h"
 
-QString m_path = "C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\SQL_FILES\\finaL_Database_3.db";
+
+QString m_path = "C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\SQL_FILES\\finaL_Database_2.db";
+
 
 
 //Connects to the database as soon as the program runs for the first time
@@ -19,6 +21,7 @@ InfoWindow::InfoWindow(QWidget *parent)
  AddToView(DataConnection());
  SetTableViews();
 
+connect(ui ->fuisonButton, SIGNAL(clicked()), this, SLOT(FusionPress()));
 
 
 
@@ -61,7 +64,6 @@ void InfoWindow::AddToView(QStringList list)
 void InfoWindow::TheClick (QModelIndex index)
 {
     //Variables that'll get instanced in a hot sec
-    Persona selection;
     QPixmap picture;
     modelTableStat = new QStandardItemModel(5,2,this);
     modelTableMagic = new QStandardItemModel(10,2,this);
@@ -96,6 +98,19 @@ void InfoWindow::TheClick (QModelIndex index)
 
 
 }
+void InfoWindow::FusionPress()
+{
+    //Do an if statement to check to see
+    //if the user clicked on a persona
+    //Also check to see if the persona
+    //is fuseable at all
+
+    f = new FusionPage(this);
+    f->GetResultArcana(selection);
+    f->show();
+}
+
+
 
 void InfoWindow::SetTableViews()
 {

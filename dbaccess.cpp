@@ -33,7 +33,7 @@ QStringList  DbAccess::GetAll(QSqlQuery query)
 Persona DbAccess::GetSinglePersona(QString indexName)
 {
     //Creates Query and Persona
-    QSqlQuery query("SELECT Name, Arcana, Level FROM Personas_Final WHERE Name = ?");
+    QSqlQuery query("SELECT Personas_Final.name, Arcana.name, Personas_Final.Level,  Personas_Final.Fuseable, Personas_Final.SpecialFusion, Personas_Final.Max_SL  FROM Personas_Final INNER JOIN Arcana ON Arcana.Arcana_ID = Personas_Final.Arcana WHERE Personas_Final.Name = ?");
     query.addBindValue(indexName);
     Persona single;
     //Looks for a Persona that matches the name of the
@@ -52,6 +52,10 @@ Persona DbAccess::GetSinglePersona(QString indexName)
             //Changed it to int like a month ago :/
             temp = query.value(2).toString();
             single.m_level = temp.toUInt();
+            single.m_fuseable = query.value(3).toBool();
+            single.m_sFusion = query.value(4).toBool();
+            single.m_maxSL = query.value(5).toBool();
+
 
         }
 
@@ -140,4 +144,39 @@ QStringList DbAccess::GetInfoMagic(QString name)
 
 
     return magicInfo;
+}
+
+//Query works!!!
+QMultiMap<QString,QString> DbAccess::GetPairs(QString arcana)
+{
+    QMultiMap<QString,QString> pairs;
+    QSqlQuery query("SELECT Arcana.Name, Pairs.First_Arcana, Pairs.Second_Arcana FROM PairConnection  INNER JOIN Pairs ON Pairs.Pair_ID = PairConnection.Pair_ID INNER JOIN Arcana ON Arcana.Arcana_ID = PairConnection.Arcana_ID WHERE Arcana.Name = ?");
+    query.addBindValue(arcana);
+
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            pairs.insert(query.value(1).toString(),query.value(2).toString());
+
+
+        }
+    }
+
+
+    return pairs;
+}
+
+QMultiMap<Persona,Persona> DbAccess::GetPersonas(QString first, QString second)
+{
+    QMultiMap<Persona, Persona> draft;
+    QList<Persona> firstList;
+    QList<Persona> secondList;
+
+
+
+
+
+    return draft;
+
 }

@@ -5,8 +5,9 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlIndex>
-#include "persona.h"
+#include <QMultiMap>
 #include <QPixmap>
+#include "persona.h"
 class DbAccess
 {
 
@@ -17,6 +18,8 @@ public:
     QPixmap GetSinglePersonaImage(QString indexName);
     QStringList GetInfoStat(QString name);
     QStringList GetInfoMagic(QString name);
+    QMultiMap<QString,QString> GetPairs(QString arcana);
+    QMultiMap<Persona,Persona> GetPersonas(QString first, QString second);
 private:
     QSqlDatabase m_db;
 

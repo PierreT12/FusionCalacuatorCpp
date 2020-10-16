@@ -11,6 +11,9 @@ public:
     QString m_arcana;
     int m_level;
     bool m_spoiler;
+    bool m_fuseable;
+    bool m_sFusion;
+    bool m_maxSL;
 
 
 

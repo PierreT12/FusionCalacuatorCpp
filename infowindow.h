@@ -5,6 +5,8 @@
 #include <QStringListModel>
 #include <QStringList>
 #include <QStandardItemModel>
+#include "fusionpage.h"
+#include "persona.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class InfoWindow; }
@@ -30,14 +32,17 @@ public:
 
 private slots:
     void TheClick (QModelIndex);
+    void FusionPress();
 
 private:
     Ui::InfoWindow *ui;
+    FusionPage *f;
     QStringListModel *model;
     QStringList *list;
     QString m_path;
     QStandardItemModel *modelTableStat;
     QStandardItemModel *modelTableMagic;
+    Persona selection;
 
 };
 #endif // INFOWINDOW_H

@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     dbaccess.cpp \
+    fusion.cpp \
     fusionpage.cpp \
     main.cpp \
     infowindow.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 
 HEADERS += \
     dbaccess.h \
+    fusion.h \
     fusionpage.h \
     infowindow.h \
     persona.h
