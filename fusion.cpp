@@ -30,7 +30,7 @@ void Fusion::StartFusion(Persona final)
     //Test Output
     for(it = arcanaMatches.begin(); it != arcanaMatches.end(); ++it)
     {
-        draftMatches = fusionAccess.GetPersonas(it.key(),it.value());
+        draftMatches = fusionAccess.GetPersonas(it.key(),it.value(),final.m_name);
         output = QString("%1 : %2").arg(it.key()).arg(it.value());
         qDebug() << output;
     }

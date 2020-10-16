@@ -19,7 +19,7 @@ public:
     QStringList GetInfoStat(QString name);
     QStringList GetInfoMagic(QString name);
     QMultiMap<QString,QString> GetPairs(QString arcana);
-    QMultiMap<Persona,Persona> GetPersonas(QString first, QString second);
+    QMultiMap<Persona,Persona> GetPersonas(QString first, QString second, QString resName);
 private:
     QSqlDatabase m_db;
 

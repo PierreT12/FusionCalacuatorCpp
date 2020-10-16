@@ -167,11 +167,60 @@ QMultiMap<QString,QString> DbAccess::GetPairs(QString arcana)
     return pairs;
 }
 
-QMultiMap<Persona,Persona> DbAccess::GetPersonas(QString first, QString second)
+QMultiMap<Persona,Persona> DbAccess::GetPersonas(QString first, QString second, QString resName)
 {
     QMultiMap<Persona, Persona> draft;
     QList<Persona> firstList;
+
     QList<Persona> secondList;
+
+    QSqlQuery queryFirst("SELECT Personas_Final.name, Arcana.name, Personas_Final.Level,  Personas_Final.Fuseable, Personas_Final.SpecialFusion, Personas_Final.Max_SL  FROM Personas_Final INNER JOIN Arcana ON Arcana.Arcana_ID = Personas_Final.Arcana WHERE Personas_Final.Fuseable = 'TRUE' AND Arcana.Name = ? AND Personas_Final.Name != ?");
+    queryFirst.addBindValue(first);
+    queryFirst.addBindValue(resName);
+
+    if(queryFirst.exec())
+    {
+
+        while(queryFirst.next())
+        {
+            Persona tempFirst;
+            QString temp;
+            tempFirst.m_name = queryFirst.value(0).toString();
+            tempFirst.m_arcana = queryFirst.value(1).toString();
+            temp = queryFirst.value(2).toString();
+            tempFirst.m_level = temp.toUInt();
+
+            firstList.append(tempFirst);
+
+//            qDebug() << tempFirst.m_name;
+
+        }
+    }
+
+
+    QSqlQuery querySecond("SELECT Personas_Final.name, Arcana.name, Personas_Final.Level,  Personas_Final.Fuseable, Personas_Final.SpecialFusion, Personas_Final.Max_SL  FROM Personas_Final INNER JOIN Arcana ON Arcana.Arcana_ID = Personas_Final.Arcana WHERE Personas_Final.Fuseable = 'TRUE' AND Arcana.Name = ? AND Personas_Final.Name != ?");
+    querySecond.addBindValue(second);
+    querySecond.addBindValue(resName);
+    if(querySecond.exec())
+    {
+
+        while(querySecond.next())
+        {
+            Persona tempSecond;
+            QString temp;
+            tempSecond.m_name = querySecond.value(0).toString();
+            tempSecond.m_arcana = querySecond.value(1).toString();
+            temp = querySecond.value(2).toString();
+            tempSecond.m_level = temp.toUInt();
+
+            secondList.append(tempSecond);
+
+//            qDebug() << tempSecond.m_name;
+
+        }
+    }
+
+
 
 
 
