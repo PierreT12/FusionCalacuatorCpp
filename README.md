@@ -1,5 +1,5 @@
 # FusionCalculatorCpp
-A remake of my C# Fusion Calculator.
+A remake of my [C# Fusion Calculator](https://github.com/PierreT12/FusionCalculatorCSharp).
 
 This is a Personal Project that I was working on in C# but I needed to transfer over to C++ for my Graduate School Portfolio.  
 Because most of the logic has already been written in C#, I just took that and implemented it in C++ and cleaned it up. All of the information relating to Personas is stored within a SQLite Database.
