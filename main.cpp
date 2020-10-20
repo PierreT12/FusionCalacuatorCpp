@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     QStringList list;
     //Variables for FusionPage
     QIcon icon ("C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\Persona_Images\\header.png");
-    QString path = "C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\SQL_FILES\\finaL_Database_3.db";
+
 
 
     //Icon Set up

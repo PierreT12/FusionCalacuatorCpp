@@ -7,6 +7,7 @@
 #include <QSqlIndex>
 #include <QMultiMap>
 #include <QPixmap>
+#include <QLinkedList>
 #include "persona.h"
 class DbAccess
 {
@@ -19,7 +20,8 @@ public:
     QStringList GetInfoStat(QString name);
     QStringList GetInfoMagic(QString name);
     QMultiMap<QString,QString> GetPairs(QString arcana);
-    QMultiMap<Persona,Persona> GetPersonas(QString first, QString second, QString resName);
+    QList<Persona> GetPersonas(QString first, QString resName);
+    QVector<int> GetArcanaLevels(QString arcana);
 private:
     QSqlDatabase m_db;
 
