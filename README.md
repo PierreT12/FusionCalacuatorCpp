@@ -7,8 +7,8 @@ Because most of the logic has already been written in C#, I just took that and i
 Also please I apologize in advance if I make some common mistakes in C++. I'm self taught as of right now, but I will be taking a class in Spring 2021!  
 
 # SQLite Database
-The database I made was too large to be uploaded to Github  
-So here's a [Google Drive](https://drive.google.com/file/d/1NNI8SEbtjX9Yu8piW7XSFhn0FfF9m5nS/view?usp=sharing) link to it  
+The database I made was too large to be uploaded to Github in its SQLite form.  
+So I exported a pictureless version to CSV pages so people can actually see what it looks like.  
 
 # Current Features
 
@@ -16,6 +16,7 @@ Displays Persona Information (Name, Acrana Level, Stat, Magic Etc.) from databas
 Loads in images properly for each persona
 Can open Fusion Page  
 Backwards Fusion  
+Special Fusion  
 
 # Features that need to be reimplemented
 Actually displaying Fusions to the UI  
@@ -26,15 +27,15 @@ Search Function
 # Needs New Logic entirely
 
 Forward Fusion  
-About Page  
-Special Fusions  
+About Page   
 Treasure Demons  
 I might not do this, from what I understand, the results can be pretty random. If I have the time I'll give it a shot.  
   
 Inherited Skills  
 
 # Recent Changes
-Backwards Fusion Works!!  
+Backwards & Special Fusion Works!!  
+
 
 
 # Logic and Layout Inspirations:
