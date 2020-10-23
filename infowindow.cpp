@@ -100,14 +100,28 @@ void InfoWindow::TheClick (QModelIndex index)
 }
 void InfoWindow::FusionPress()
 {
-    //Do an if statement to check to see
-    //if the user clicked on a persona
-    //Also check to see if the persona
-    //is fuseable at all
+
+
+
 
     f = new FusionPage(this);
-    f->GetResultArcana(selection);
-    f->show();
+
+
+
+    if(!selection.m_fuseable)
+    {
+        QMessageBox noFuse;
+        noFuse.setText("Sorry this Persona cannot be fused.");
+        noFuse.setInformativeText("Please try a different Persona!");
+        noFuse.setIcon(QMessageBox::Critical);
+        noFuse.exec();
+
+    }
+    else
+    {
+        f->GetResultArcana(selection);
+        f->show();
+    }
 }
 
 

@@ -214,9 +214,9 @@ QList<Persona> DbAccess::GetPersonas(QString first, QString resName)
 
 
 
-QVector<int> DbAccess::GetArcanaLevels(QString arcana)
+QList<int> DbAccess::GetArcanaLevels(QString arcana)
 {
-    QVector<int> levels;
+    QList<int> levels;
     QSqlQuery query("SELECT Personas_Final.Level FROM Personas_Final INNER JOIN Arcana ON Arcana.Arcana_ID = Personas_Final.Arcana WHERE Personas_Final.Spoiler = 'FALSE' AND Arcana.Name = ?");
     query.addBindValue(arcana);
 
@@ -229,6 +229,27 @@ QVector<int> DbAccess::GetArcanaLevels(QString arcana)
             levels.append(query.value(0).toInt());
         }
     }
-
     return levels;
+}
+
+
+
+int DbAccess::GetPK(QString name)
+{
+    int pK;
+
+    QSqlQuery query("SELECT Personas_Final.Main_ID FROM Personas_Final WHERE Name = ?");
+    query.addBindValue(name);
+
+
+    if(query.exec())
+    {
+
+        while(query.next())
+        {
+            pK = query.value(0).toInt();
+        }
+    }
+
+    return pK;
 }

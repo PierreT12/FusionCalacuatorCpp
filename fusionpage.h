@@ -3,8 +3,11 @@
 
 #include <QDialog>
 #include <QLabel>
+#include <QMessageBox>
+
 #include "persona.h"
 #include "fusion.h"
+#include "multithreadfusion.h"
 
 namespace Ui {
 class FusionPage;
@@ -19,6 +22,9 @@ public:
     ~FusionPage();
    void GetResultArcana(Persona ResPersona);
    void StartFusion(Persona result);
+
+
+
 
 private:
     Ui::FusionPage *ui;

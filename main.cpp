@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QSqlQuery>
 
+
 void OpenConnection(std::string);
 
 int main(int argc, char *argv[])
@@ -23,11 +24,14 @@ int main(int argc, char *argv[])
     //Icon Set up
     w.setWindowIcon(icon);
 
+    //Multithreading testing
+
 
 
 
 
     //Shows main window
     w.show();
+
     return a.exec();
 }

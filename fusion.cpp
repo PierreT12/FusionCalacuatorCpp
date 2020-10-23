@@ -6,6 +6,7 @@ QString path = "C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\SQ
 
 DbAccess fusionAccess(path);
 
+
 Fusion::Fusion(Persona final)
 {
     m_final = final;
@@ -14,51 +15,54 @@ Fusion::Fusion(Persona final)
 
 }
 
-void Fusion::StartFusion(Persona final)
+QMultiMap<QString, QString> Fusion::StartFusion(Persona final)
 {
 
 
-    QMultiMap<QString,QString> arcanaMatches;
-    QMultiMap<QString,QString> finalMatches;
+    QStringList strList;
     QList<Persona> firstFullArcana;
     QList<Persona> secondFullArcana;
-    //Run Database to get matching arcanas
-    //Store in multimap
-    //Output into multimap properly
-    arcanaMatches = fusionAccess.GetPairs(final.m_arcana);
+
+    QList<int> arcanaLvls;
+    QMultiMap<QString,QString> matches;
+    QMultiMap<QString,QString> finalfinal;
+
+
+
+    //Gets a list of levels for the Target Aracana from the Database
+    arcanaLvls = fusionAccess.GetArcanaLevels(final.m_arcana);
+    //Gets the Pair Aracna Matches from the Database
+    matches = fusionAccess.GetPairs(final.m_arcana);
 
     QMap<QString, QString>::iterator it;
-    QString output;
+
     //Test Output
-    for(it = arcanaMatches.begin(); it != arcanaMatches.end(); ++it)
+    for(it = matches.begin(); it != matches.end(); ++it)
     {
+
         firstFullArcana = fusionAccess.GetPersonas(it.key(),final.m_name);
         secondFullArcana = fusionAccess.GetPersonas(it.value(), final.m_name);
 
-        output = QString("%1 : %2").arg(it.key()).arg(it.value());
-        qDebug() << output;
-        //needs all of final for the round up
-       finalMatches += fusionCheck(firstFullArcana,secondFullArcana, final);
+       strList += fusionCheck(firstFullArcana,secondFullArcana, arcanaLvls, final);
 
 
     }
 
-    QMap<QString,QString>::iterator per;
-    qDebug() << "All the hard work is done";
-    for(per = finalMatches.begin(); per != finalMatches.end(); ++per)
-    {
-        QString output;
-        output = QString("%1 : %2").arg(per.key()).arg(per.value());
-        qDebug() << output;
-    }
+
+    return finalfinal;
 }
 
 
-QMultiMap<QString,QString> Fusion::fusionCheck(QList<Persona> first,
+///Regular fusions
+
+QStringList Fusion::fusionCheck(QList<Persona> first,
                                                  QList<Persona> second,
+                                                QList<int> arcanaLvls,
                                                  Persona target)
 {
-    QMultiMap<QString,QString> results;
+    QString forResults;
+    //Need a quick way to see if each is unique
+    QStringList strList;
     bool sameArcana;
     bool correctLevel;
     int calcLevel;
@@ -73,12 +77,22 @@ QMultiMap<QString,QString> Fusion::fusionCheck(QList<Persona> first,
 
                     sameArcana = SamePerArcana(first.at(i), second.at(k));
                     calcLevel = CalculateLevel(first.at(i).m_level, second.at(k).m_level);
-                    roundedLevel = RoundType(calcLevel,sameArcana,first.at(i), second.at(k), target.m_arcana);
-                    correctLevel = FinalCheck(roundedLevel, target.m_level);
+                    roundedLevel = RoundType(calcLevel,sameArcana,first.at(i), second.at(k), arcanaLvls);
+
+
+
+                   correctLevel = FinalCheck(roundedLevel, target.m_level, first.at(i).m_name, second.at(k).m_name, strList);
+
+
 
                     if(correctLevel)
                     {
-                      results.insert(first.at(i).m_name, second.at(k).m_name);
+
+
+                           forResults = first.at(i).m_name + " : " + second.at(k).m_name;
+                            strList.append(forResults);
+
+
                     }
                 }
 
@@ -87,12 +101,87 @@ QMultiMap<QString,QString> Fusion::fusionCheck(QList<Persona> first,
         }
     }
 
+    qDebug() << strList;
 
-
-
-    return results;
+    return strList;
 }
 
+///Special Fusions
+
+QStringList Fusion::specialFusion(Persona target)
+{
+    QStringList specialResults;
+
+    //Cant swithch with QStrings so I'm getting the
+    //PK of the Special Fusion Persona selected
+    //And using a switch case with that
+
+    int personaSF = fusionAccess.GetPK(target.m_name);
+
+    //None of these fusions involve math because they're
+    //preset, so I just store all their fusion pairs
+    //in the database
+    switch (personaSF)
+    {
+        case 12:
+        break;
+        case 14:
+        break;
+        case 17:
+        break;
+        case 74:
+        break;
+        case 100:
+        break;
+        case 112:
+        break;
+        case 127:
+        break;
+        case 164:
+        break;
+        case 171:
+        break;
+        case 182:
+        break;
+        case 194:
+        break;
+        case 197:
+        break;
+        case 201:
+        break;
+        case 204:
+        break;
+        case 205:
+        break;
+        case 207:
+        break;
+        case 228:
+        break;
+        case 230:
+        break;
+        case 235:
+        break;
+        case 237:
+        break;
+        case 260:
+        break;
+        case 261:
+        break;
+    default:
+        qDebug() << "Something has gone very wrong :{";
+        break;
+    };
+
+
+
+    return specialResults;
+
+}
+
+
+///Treasure Demon Fusions
+/// There is a set range of levels that could result,
+/// but all in all wont be very accurate
 
 
 bool Fusion::SamePerArcana(Persona firstPer, Persona secondPer)
@@ -111,19 +200,61 @@ bool Fusion::SamePerArcana(Persona firstPer, Persona secondPer)
     return same;
 }
 
-bool Fusion::FinalCheck(int calcLevel, int realLevel)
+bool Fusion::FinalCheck(int calcLevel, int realLevel, QString first, QString second, QStringList alreadyadded)
 {
     bool correct;
+    alreadyadded.sort(Qt::CaseInsensitive);
+    QString testStr = second + " : " + first;
 
-    if(calcLevel == realLevel)
-        correct = true;
-    else
-    {
-        correct = false;
-    }
+        if(calcLevel == realLevel)
+            correct = true;
+        else
+        {
+            correct = false;
+        }
+
+        if(correct)
+        {
+
+                for(int i = 0; i < alreadyadded.size(); ++i)
+                {
+
+                        if(alreadyadded.at(i).contains(testStr, Qt::CaseInsensitive))
+                        {
+                            correct = false;
+                            break;
+                        }
+                        else
+                        {
+                            if(calcLevel == realLevel)
+                                correct = true;
+                            else
+                            {
+                                correct = false;
+                            }
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     return correct;
 }
+
+
+
+
 
 ///Level Calculation and Rounding Methods///
 
@@ -154,14 +285,16 @@ int Fusion::CalculateLevel(int first, int second)
 
 
 
-
+//You need to get all the Arcana Levels before this
+///Only once, otherwise
+//There will be a huge slowdown
 int Fusion::RoundType(int calcLevel,
                       bool sameArcana,
                       Persona first,
                       Persona second,
-                      QString tagetArcana)
+                      QList<int> arcanaLvls)
 {
-    QVector<int> arcanaLvls = fusionAccess.GetArcanaLevels(tagetArcana);
+    //For some reason this SQL Query is taking forever
     int roundedLevel;
     if(sameArcana)
     {
@@ -178,7 +311,7 @@ int Fusion::RoundType(int calcLevel,
 }
 
 //Isnt rounding properly for some reason
-int Fusion::RoundDown(int calcLevel, int lvlFirst, int lvlSecond, QVector<int> arcanaLvls)
+int Fusion::RoundDown(int calcLevel, int lvlFirst, int lvlSecond, QList<int> arcanaLvls)
 {
     int roundedLevel = 0;
     for(int i = 1; i< arcanaLvls.count(); i++)
@@ -209,7 +342,7 @@ int Fusion::RoundDown(int calcLevel, int lvlFirst, int lvlSecond, QVector<int> a
 }
 
 
-int Fusion::RoundUp(int calcLevel,QVector<int> arcanaLvls)
+int Fusion::RoundUp(int calcLevel,QList<int> arcanaLvls)
 {
     int roundedLevel = 0;
 

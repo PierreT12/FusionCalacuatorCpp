@@ -21,7 +21,8 @@ public:
     QStringList GetInfoMagic(QString name);
     QMultiMap<QString,QString> GetPairs(QString arcana);
     QList<Persona> GetPersonas(QString first, QString resName);
-    QVector<int> GetArcanaLevels(QString arcana);
+    QList<int> GetArcanaLevels(QString arcana);
+    int GetPK(QString name);
 private:
     QSqlDatabase m_db;
 

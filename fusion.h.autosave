@@ -8,9 +8,11 @@ class Fusion
 {
 public:
     Fusion(Persona final);
-
-   QMultiMap<QString, QString> StartFusion(Persona final);
+    
+   
    //Acutal Main Fusion Methods
+   QMultiMap<QString, QString> StartFusion(Persona final);
+    
    QStringList  fusionCheck(QList<Persona> first,
                                            QList<Persona> second,
                                            QList<int> arcanaLvls,

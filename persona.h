@@ -2,8 +2,10 @@
 #define PERSONA_H
 #include <QString>
 
+
 class Persona
 {
+
 public:
     //Testing out making all these public
     //need to be accessed in other classes uwu
@@ -18,7 +20,7 @@ public:
 
 
 
-    Persona();
+Persona();
 
 
 private:

@@ -28,28 +28,43 @@ void FusionPage::GetResultArcana(Persona ResPersona)
 {
     m_result = ResPersona;
     QString level = QString::number(m_result.m_level);
-
+    QMultiMap<QString,QString> matches;
 
     ui->perArcFLbl->setText(m_result.m_arcana);
     ui->PerFLbl->setText(m_result.m_name);
     ui->perFLvlLbl->setText(level);
 
-    StartFusion(m_result);
+   StartFusion(m_result);
+
+
 
 
 }
 
 void FusionPage::StartFusion(Persona result)
 {
-
-    //Write SqLite Query to get Matching Arcana Pair
     Fusion fusion(result);
 
-    fusion.StartFusion(result);
-    //Write SqLite Query to get all Personas from Each
-    //Mathcing Pair
+    if(result.m_sFusion)
+    {
+        fusion.specialFusion(result);
+    }
+    else
+    {
+        fusion.StartFusion(result);
+    }
+
+
+
+    //Do Treasure fusions
+
+
+
 
 
 
 
 }
+
+
+
