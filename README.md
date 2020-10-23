@@ -24,7 +24,8 @@ Search Function
 # Needs New Logic entirely
 
 Forward Fusion  
-About Page
+About Page  
+Special Fusions  
 Treasure Demons  
 I might not do this, from what I understand, the results can be pretty random. If I have the time I'll give it a shot.  
   
