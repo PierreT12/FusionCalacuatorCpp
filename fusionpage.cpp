@@ -6,19 +6,11 @@ FusionPage::FusionPage(QWidget *parent) :
     ui(new Ui::FusionPage)
 {
     ui->setupUi(this);
-
-
-
-
-
-
-
 }
 
 FusionPage::~FusionPage()
 {
     this->close();
-
 }
 
 
@@ -36,9 +28,6 @@ void FusionPage::GetResultArcana(Persona ResPersona)
 
    StartFusion(m_result);
 
-
-
-
 }
 
 void FusionPage::StartFusion(Persona result)
@@ -46,23 +35,12 @@ void FusionPage::StartFusion(Persona result)
     Fusion fusion(result);
 
     if(result.m_sFusion)
-    {
         fusion.specialFusion(result);
-    }
+
     else
-    {
         fusion.StartFusion(result);
-    }
-
-
 
     //Do Treasure fusions
-
-
-
-
-
-
 
 }
 

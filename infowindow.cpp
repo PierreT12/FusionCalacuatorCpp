@@ -21,8 +21,12 @@ InfoWindow::InfoWindow(QWidget *parent)
  AddToView(DataConnection());
  SetTableViews();
 
-connect(ui ->fuisonButton, SIGNAL(clicked()), this, SLOT(FusionPress()));
-
+//All of signal/slot listeners(?)
+connect(ui-> fuisonButton, SIGNAL(clicked()), this, SLOT(FusionPress()));
+connect(ui-> actionExit, SIGNAL(triggered()), this, SLOT(Exit()));
+//connect(ui-> actionAbout, SIGNAL(triggered()), this, SLOT(OpenAbout));
+//connect(ui-> actionHelp, SIGNAL(triggered()), this, SLOT(OpenHelp));
+//connect(ui-> actionSettings, SIGNAL(triggered()), this, SLOT(OpenSettings));
 
 
 
@@ -32,23 +36,18 @@ InfoWindow::~InfoWindow()
 {
     delete ui;
 }
+
 QStringList InfoWindow::DataConnection()
 {
     QStringList list;
 
-
-
-    //Does a basic query to get all the persona names as soon as
-    //The database connection is made
-    QSqlQuery query("Select Name FROM Personas_Final ORDER BY Level ASC");
-    list = mainAccess.GetAll(query);
+    list = mainAccess.GetAll();
 
     return list;
 }
 
 void InfoWindow::AddToView(QStringList list)
 {
-
         // Create model for list
         model = new QStringListModel(this);
         //Add Data to the model
@@ -61,6 +60,9 @@ void InfoWindow::AddToView(QStringList list)
         ui->personaView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         connect(ui->personaView, SIGNAL(clicked(QModelIndex)),this,SLOT(TheClick(QModelIndex)));
 }
+
+///All of the slot methods
+//Button/ListView Presses on InfoPage
 void InfoWindow::TheClick (QModelIndex index)
 {
     //Variables that'll get instanced in a hot sec
@@ -69,6 +71,7 @@ void InfoWindow::TheClick (QModelIndex index)
     modelTableMagic = new QStandardItemModel(10,2,this);
     QStringList stats;
     QStringList magic;
+
     //Cast model to QStringModel
     QStringListModel* listModel= qobject_cast<QStringListModel*>(ui->personaView ->model());
 
@@ -76,7 +79,6 @@ void InfoWindow::TheClick (QModelIndex index)
 
     //Gets the selected persona from the database
     selection = mainAccess.GetSinglePersona(name);
-
     picture = mainAccess.GetSinglePersonaImage(name);
 
     //Displays all of the basic Persona Info to the InfoWindow
@@ -92,21 +94,17 @@ void InfoWindow::TheClick (QModelIndex index)
 
 
     stats = mainAccess.GetInfoStat(selection.m_name);
-    AddToUiInfo(modelTableStat,stats);
     magic = mainAccess.GetInfoMagic(selection.m_name);
+
+    AddToUiInfo(modelTableStat,stats);
     AddToUiInfo(modelTableMagic,magic);
 
 
 }
+
 void InfoWindow::FusionPress()
 {
-
-
-
-
     f = new FusionPage(this);
-
-
 
     if(!selection.m_fuseable)
     {
@@ -115,7 +113,6 @@ void InfoWindow::FusionPress()
         noFuse.setInformativeText("Please try a different Persona!");
         noFuse.setIcon(QMessageBox::Critical);
         noFuse.exec();
-
     }
     else
     {
@@ -124,38 +121,55 @@ void InfoWindow::FusionPress()
     }
 }
 
+//MenuBar Button Presses
+void InfoWindow::Exit()
+{
+    this->close();
+}
+
 
 
 void InfoWindow::SetTableViews()
 {
-    modelTableStat = new QStandardItemModel(5,2,this);
-    modelTableMagic = new QStandardItemModel(10,2,this);
+
     QStringList stats;
     QStringList magic;
     QStringList statBasic;
     QStringList magicBasic;
 
+    modelTableStat = new QStandardItemModel(5,2,this);
+    modelTableMagic = new QStandardItemModel(10,2,this);
 
     stats <<"Stat" << "Value";
-    statBasic << "Strength" << "Magic"
-              << "Endurance" << "Agility"
+
+    statBasic << "Strength"
+              << "Magic"
+              << "Endurance"
+              << "Agility"
               << "Luck";
+
     modelTableStat->setHorizontalHeaderLabels(stats);
 
     ui ->statView ->setModel(modelTableStat);
     AddToUi(modelTableStat, statBasic);
 
 
-
     magic <<"Magic" << "Value";
     //This is just the names for right now
     //Later will be the images
-    magicBasic <<"Physical" << "Gun"
-              <<"Fire" <<"Ice"
-              << "Elec" << "Wind"
-              << "Psych" << "Nuke"
-              << "Bless" << "Curse";
+    magicBasic <<"Physical"
+              << "Gun"
+              <<"Fire"
+              <<"Ice"
+              << "Elec"
+              << "Wind"
+              << "Psych"
+              << "Nuke"
+              << "Bless"
+              << "Curse";
+
     modelTableMagic->setHorizontalHeaderLabels(magic);
+
     ui ->magicView ->setModel(modelTableMagic);
     AddToUi(modelTableMagic, magicBasic);
 
@@ -173,17 +187,13 @@ void InfoWindow::AddToUi(QStandardItemModel* models,
                          QStringList list)
 {
 
-
-
     for(int row = 0; row < list.size(); row++)
         {
             int col = 0;
 
-
-
-
-            QModelIndex index
-   = models -> index(row, col, QModelIndex());
+            QModelIndex index = models -> index(row,
+                                                col,
+                                                QModelIndex());
 
             models->setData(index,list.at(row));
 
@@ -200,24 +210,15 @@ void InfoWindow::AddToUiInfo(QStandardItemModel* models,
                              QStringList list)
 {
 
-
-
     for(int row = 0; row < list.size(); row++)
         {
             int col = 1;
 
-
-
-
-            QModelIndex index
-   = models -> index(row, col, QModelIndex());
+            QModelIndex index = models -> index(row,
+                                                col,
+                                                QModelIndex());
 
             models->setData(index,list.at(row));
 
-
         }
-
-
-
-
 }

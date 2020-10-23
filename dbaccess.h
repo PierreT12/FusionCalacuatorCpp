@@ -14,7 +14,7 @@ class DbAccess
 
 public:
     DbAccess(const QString& path);
-    QStringList GetAll(QSqlQuery query);
+    QStringList GetAll();
     Persona GetSinglePersona(QString indexName);
     QPixmap GetSinglePersonaImage(QString indexName);
     QStringList GetInfoStat(QString name);

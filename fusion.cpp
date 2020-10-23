@@ -7,62 +7,56 @@ QString path = "C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\SQ
 DbAccess fusionAccess(path);
 
 
-Fusion::Fusion(Persona final)
+Fusion::Fusion(Persona target)
 {
-    m_final = final;
-
-
+    m_target = target;
 
 }
 
-QMultiMap<QString, QString> Fusion::StartFusion(Persona final)
+QMultiMap<QString, QString> Fusion::StartFusion(Persona target)
 {
 
 
-    QStringList strList;
+    QStringList finalListMatch;
+
     QList<Persona> firstFullArcana;
     QList<Persona> secondFullArcana;
-
     QList<int> arcanaLvls;
+
     QMultiMap<QString,QString> matches;
-    QMultiMap<QString,QString> finalfinal;
+    QMultiMap<QString,QString> finalmatches;
 
 
 
     //Gets a list of levels for the Target Aracana from the Database
-    arcanaLvls = fusionAccess.GetArcanaLevels(final.m_arcana);
+    arcanaLvls = fusionAccess.GetArcanaLevels(target.m_arcana);
     //Gets the Pair Aracna Matches from the Database
-    matches = fusionAccess.GetPairs(final.m_arcana);
+    matches = fusionAccess.GetPairs(target.m_arcana);
+
 
     QMap<QString, QString>::iterator it;
 
-    //Test Output
     for(it = matches.begin(); it != matches.end(); ++it)
     {
+        firstFullArcana = fusionAccess.GetPersonas(it.key(),target.m_name);
+        secondFullArcana = fusionAccess.GetPersonas(it.value(), target.m_name);
 
-        firstFullArcana = fusionAccess.GetPersonas(it.key(),final.m_name);
-        secondFullArcana = fusionAccess.GetPersonas(it.value(), final.m_name);
-
-       strList += fusionCheck(firstFullArcana,secondFullArcana, arcanaLvls, final);
-
-
+        finalListMatch += fusionCheck(firstFullArcana,secondFullArcana, arcanaLvls, target);
     }
 
-
-    return finalfinal;
+    return finalmatches;
 }
-
 
 ///Regular fusions
 
 QStringList Fusion::fusionCheck(QList<Persona> first,
-                                                 QList<Persona> second,
-                                                QList<int> arcanaLvls,
-                                                 Persona target)
+                                QList<Persona> second,
+                                QList<int> arcanaLvls,
+                                Persona target)
 {
-    QString forResults;
+    QString results;
     //Need a quick way to see if each is unique
-    QStringList strList;
+    QStringList finalListMatch;
     bool sameArcana;
     bool correctLevel;
     int calcLevel;
@@ -72,38 +66,39 @@ QStringList Fusion::fusionCheck(QList<Persona> first,
     {
         for(int k = 0; k < second.size(); k++)
         {
-                if(!first.at(i).m_name.contains(second.at(k).m_name))
+            if(!first.at(i).m_name.contains(second.at(k).m_name))
+            {
+                sameArcana = SamePerArcana(first.at(i), second.at(k));
+
+
+                calcLevel = CalculateLevel(first.at(i).m_level, second.at(k).m_level);
+
+
+                roundedLevel = RoundType(calcLevel,
+                                         sameArcana,
+                                         first.at(i),
+                                         second.at(k),
+                                         arcanaLvls);
+
+
+                correctLevel = FinalCheck(roundedLevel,
+                                          target.m_level,
+                                          first.at(i).m_name,
+                                          second.at(k).m_name,
+                                          finalListMatch);
+
+                if(correctLevel)
                 {
-
-                    sameArcana = SamePerArcana(first.at(i), second.at(k));
-                    calcLevel = CalculateLevel(first.at(i).m_level, second.at(k).m_level);
-                    roundedLevel = RoundType(calcLevel,sameArcana,first.at(i), second.at(k), arcanaLvls);
-
-
-
-                   correctLevel = FinalCheck(roundedLevel, target.m_level, first.at(i).m_name, second.at(k).m_name, strList);
-
-
-
-                    if(correctLevel)
-                    {
-
-
-                           forResults = first.at(i).m_name + " : " + second.at(k).m_name;
-                            strList.append(forResults);
-
-
-                    }
+                    results = first.at(i).m_name + " : " + second.at(k).m_name;
+                    finalListMatch.append(results);
                 }
-
-
-
+            }
         }
     }
 
-    qDebug() << strList;
+    qDebug() << finalListMatch;
 
-    return strList;
+    return finalListMatch;
 }
 
 ///Special Fusions
@@ -112,89 +107,73 @@ QStringList Fusion::specialFusion(Persona target)
 {
     QStringList specialResults;
 
-    //Cant swithch with QStrings so I'm getting the
-    //PK of the Special Fusion Persona selected
-    //And using a switch case with that
 
     int personaSF = fusionAccess.GetPK(target.m_name);
 
     specialResults = fusionAccess.GetSpecialResults(personaSF);
 
 
-
     return specialResults;
 
 }
-
 
 ///Treasure Demon Fusions
 /// There is a set range of levels that could result,
 /// but all in all wont be very accurate
 
 
-bool Fusion::SamePerArcana(Persona firstPer, Persona secondPer)
+bool Fusion::SamePerArcana(Persona first,
+                           Persona second)
 {
-    bool same;
+    bool sameArcana;
 
-    if(firstPer.m_arcana == secondPer.m_arcana)
-    {
-        same = true;
-    }
+    if(first.m_arcana == second.m_arcana)
+        sameArcana = true;
     else
-    {
-        same = false;
-    }
+        sameArcana = false;
 
-    return same;
+    return sameArcana;
 }
 
-bool Fusion::FinalCheck(int calcLevel, int realLevel, QString first, QString second, QStringList alreadyadded)
+bool Fusion::FinalCheck(int calcLevel,
+                        int realLevel,
+                        QString first,
+                        QString second,
+                        QStringList finalListMatch)
 {
+    finalListMatch.sort(Qt::CaseInsensitive);
     bool correct;
-    alreadyadded.sort(Qt::CaseInsensitive);
     QString testStr = second + " : " + first;
 
-        if(calcLevel == realLevel)
-            correct = true;
-        else
+    correct = MathCheck(calcLevel, realLevel);
+
+    if(correct)
+    {
+        for(int i = 0; i < finalListMatch.size(); ++i)
         {
-            correct = false;
+            if(finalListMatch.at(i).contains(testStr, Qt::CaseInsensitive))
+            {
+                correct = false;
+                break;
+            }
+            else
+                correct = MathCheck(calcLevel, realLevel);
         }
-
-        if(correct)
-        {
-
-                for(int i = 0; i < alreadyadded.size(); ++i)
-                {
-
-                        if(alreadyadded.at(i).contains(testStr, Qt::CaseInsensitive))
-                        {
-                            correct = false;
-                            break;
-                        }
-                        else
-                        {
-                            if(calcLevel == realLevel)
-                                correct = true;
-                            else
-                            {
-                                correct = false;
-                            }
-                        }
-                    }
-                }
+    }
+    return correct;
+}
 
 
 
+bool Fusion::MathCheck(int calcLevel,
+                       int realLevel)
+{
+    bool correct;
 
-
-
-
-
-
-
-
-
+    if(calcLevel == realLevel)
+        correct = true;
+    else
+        correct = false;
 
 
     return correct;
@@ -202,13 +181,13 @@ bool Fusion::FinalCheck(int calcLevel, int realLevel, QString first, QString sec
 
 
 
-
-
 ///Level Calculation and Rounding Methods///
 
-int Fusion::CalculateLevel(int first, int second)
+//Make it look pretty
+int Fusion::CalculateLevel(int first,
+                           int second)
 {
-    int calc;
+    int calcLevel;
     double templevel;
 
     //Works but looks ugly fix it up
@@ -217,51 +196,50 @@ int Fusion::CalculateLevel(int first, int second)
 
     //Checking to see if the number needs to have the 0.5 or 1 added
     if(floor(templevel) == templevel)
-    {
         templevel = templevel + 1;
-    }
+
     else
-    {
         templevel = templevel + 0.5;
-    }
+
 
     //cast it back an int
-    calc = (int)templevel;
-    return calc;
+    calcLevel = (int)templevel;
+    return calcLevel;
 
 }
 
 
 
-//You need to get all the Arcana Levels before this
-///Only once, otherwise
-//There will be a huge slowdown
+
 int Fusion::RoundType(int calcLevel,
                       bool sameArcana,
                       Persona first,
                       Persona second,
                       QList<int> arcanaLvls)
 {
-    //For some reason this SQL Query is taking forever
+
     int roundedLevel;
     if(sameArcana)
-    {
-       roundedLevel = RoundDown(calcLevel, first.m_level, second.m_level, arcanaLvls);
-    }
-    else
-    {
+        roundedLevel = RoundDown(calcLevel,
+                                 first.m_level,
+                                 second.m_level,
+                                 arcanaLvls);
 
+    else
      roundedLevel = RoundUp(calcLevel, arcanaLvls);
-    }
 
 
     return roundedLevel;
 }
 
-//Isnt rounding properly for some reason
-int Fusion::RoundDown(int calcLevel, int lvlFirst, int lvlSecond, QList<int> arcanaLvls)
+
+int Fusion::RoundDown(int calcLevel,
+                      int lvlFirst,
+                      int lvlSecond,
+                      QList<int> arcanaLvls)
 {
     int roundedLevel = 0;
+
     for(int i = 1; i< arcanaLvls.count(); i++)
     {
         if(arcanaLvls.at(i) < calcLevel &&
@@ -280,17 +258,12 @@ int Fusion::RoundDown(int calcLevel, int lvlFirst, int lvlSecond, QList<int> arc
         }
     }
 
-
-
-
-
-
-
     return roundedLevel;
 }
 
 
-int Fusion::RoundUp(int calcLevel,QList<int> arcanaLvls)
+int Fusion::RoundUp(int calcLevel,
+                    QList<int> arcanaLvls)
 {
     int roundedLevel = 0;
 
@@ -304,14 +277,7 @@ int Fusion::RoundUp(int calcLevel,QList<int> arcanaLvls)
     }
 
     if(calcLevel >= arcanaLvls.at(arcanaLvls.count() - 1))
-    {
         roundedLevel = arcanaLvls.at(arcanaLvls.count() - 1);
-    }
-
-
-
-
-
 
     return roundedLevel;
 }

@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     InfoWindow w;
     QStringListModel model;
     QStringList list;
+
     //Variables for FusionPage
     QIcon icon ("C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\Persona_Images\\header.png");
 
@@ -24,7 +25,6 @@ int main(int argc, char *argv[])
     //Icon Set up
     w.setWindowIcon(icon);
 
-    //Multithreading testing
 
 
 

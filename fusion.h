@@ -17,18 +17,23 @@ public:
                                            QList<Persona> second,
                                            QList<int> arcanaLvls,
                                            Persona target);
+
    QStringList specialFusion(Persona target);
 
    //Doing Queries or Math Methods
     bool SamePerArcana(Persona firstPer,
                        Persona secondPer);
+
     int CalculateLevel(int first,
                        int second);
+
     bool FinalCheck(int calcLevel,
                     int realLevel,
                     QString first,
                     QString second,
                     QStringList alreadyadded);
+
+    bool MathCheck(int calcLevel,int realLevel);
 
 
     //Rounding Methods
@@ -48,9 +53,8 @@ public:
 
 
 private:
-    Persona m_final;
-    Persona m_first;
-    Persona m_second;
+    Persona m_target;
+
 
 };
 

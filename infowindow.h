@@ -33,6 +33,10 @@ public:
 private slots:
     void TheClick (QModelIndex);
     void FusionPress();
+    void Exit();
+//    void OpenAbout();
+//    void OpenHelp();
+//    void OpenSettings();
 
 private:
     Ui::InfoWindow *ui;
