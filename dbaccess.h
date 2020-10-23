@@ -23,6 +23,7 @@ public:
     QList<Persona> GetPersonas(QString first, QString resName);
     QList<int> GetArcanaLevels(QString arcana);
     int GetPK(QString name);
+    QStringList GetSpecialResults(int ID);
 private:
     QSqlDatabase m_db;
 

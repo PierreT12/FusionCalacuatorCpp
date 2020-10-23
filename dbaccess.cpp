@@ -253,3 +253,25 @@ int DbAccess::GetPK(QString name)
 
     return pK;
 }
+
+
+
+QStringList DbAccess::GetSpecialResults(int ID)
+{
+    QStringList results;
+
+    QSqlQuery query("SELECT SpeFusion.Name FROM SpecConnection INNER JOIN SpeFusion ON SpeFusion.SF_ID = SpecConnection.SF_ID INNER JOIN Personas_Final ON Personas_Final.Main_ID = SpecConnection.Main_ID WHERE Personas_Final.Main_ID = ?");
+    query.addBindValue(ID);
+
+    if(query.exec())
+    {
+
+        while(query.next())
+        {
+            results.append(query.value(0).toString());
+        }
+    }
+
+    qDebug() << results;
+    return results;
+}

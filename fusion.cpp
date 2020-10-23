@@ -118,59 +118,7 @@ QStringList Fusion::specialFusion(Persona target)
 
     int personaSF = fusionAccess.GetPK(target.m_name);
 
-    //None of these fusions involve math because they're
-    //preset, so I just store all their fusion pairs
-    //in the database
-    switch (personaSF)
-    {
-        case 12:
-        break;
-        case 14:
-        break;
-        case 17:
-        break;
-        case 74:
-        break;
-        case 100:
-        break;
-        case 112:
-        break;
-        case 127:
-        break;
-        case 164:
-        break;
-        case 171:
-        break;
-        case 182:
-        break;
-        case 194:
-        break;
-        case 197:
-        break;
-        case 201:
-        break;
-        case 204:
-        break;
-        case 205:
-        break;
-        case 207:
-        break;
-        case 228:
-        break;
-        case 230:
-        break;
-        case 235:
-        break;
-        case 237:
-        break;
-        case 260:
-        break;
-        case 261:
-        break;
-    default:
-        qDebug() << "Something has gone very wrong :{";
-        break;
-    };
+    specialResults = fusionAccess.GetSpecialResults(personaSF);
 
 
 
