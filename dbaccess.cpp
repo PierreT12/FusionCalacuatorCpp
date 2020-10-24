@@ -1,7 +1,6 @@
 #include "dbaccess.h"
 
 
-
 DbAccess::DbAccess(const QString& path)
 {
    m_db = QSqlDatabase::addDatabase("QSQLITE");
@@ -14,11 +13,71 @@ DbAccess::DbAccess(const QString& path)
       qDebug() << "Database: connection ok";
 }
 
+
+QStringList DbAccess::GetAllNoSpoilsDLC()
+{
+    QStringList list;
+
+    QSqlQuery query("Select Name FROM Personas_Final "
+                    "WHERE Personas_Final.Spoiler = 'FALSE'"
+                    "AND Personas_Final.DLC = 'FALSE'"
+                    "ORDER BY Level ASC ");
+    int id = query.record().indexOf("name");
+
+    while(query.next())
+    {
+        QString name = query.value(id).toString();
+           list.append(name);
+    }
+    return list;
+}
+
+
+QStringList DbAccess::GetAllDLC()
+{
+    QStringList list;
+
+    QSqlQuery query("Select Name "
+                    "FROM Personas_Final "
+                    "WHERE Personas_Final.Spoiler = 'FALSE' "
+                    "ORDER BY Level ASC");
+    int id = query.record().indexOf("name");
+
+    while(query.next())
+    {
+        QString name = query.value(id).toString();
+           list.append(name);
+    }
+    return list;
+}
+
+
+QStringList DbAccess::GetAllSpoils()
+{
+    QStringList list;
+
+    QSqlQuery query("Select Name "
+                    "FROM Personas_Final "
+                    "WHERE Personas_Final.DLC = 'FALSE' "
+                    "ORDER BY Level ASC");
+    int id = query.record().indexOf("name");
+
+    while(query.next())
+    {
+        QString name = query.value(id).toString();
+           list.append(name);
+    }
+    return list;
+}
+
+
 QStringList DbAccess::GetAll()
 {
     QStringList list;
 
-    QSqlQuery query("Select Name FROM Personas_Final ORDER BY Level ASC");
+    QSqlQuery query("Select Name "
+                    "FROM Personas_Final "
+                    "ORDER BY Level ASC");
     int id = query.record().indexOf("name");
 
     while(query.next())
@@ -75,8 +134,6 @@ return  selection;
 }
 
 
-
-
 QPixmap DbAccess::GetSinglePersonaImage(QString indexName)
 {
     //Creates pixmap that'll store image
@@ -88,8 +145,6 @@ QPixmap DbAccess::GetSinglePersonaImage(QString indexName)
     query.addBindValue(indexName);
 
 
-
-//Working now
     if(query.exec())
     {
     QByteArray outByteArray;
@@ -102,9 +157,9 @@ QPixmap DbAccess::GetSinglePersonaImage(QString indexName)
     return outPixmap;
 }
 
+
 QStringList DbAccess::GetInfoStat(QString name)
 {
-    //Creating List and Query
     QStringList statInfo;
     QSqlQuery query("SELECT Stats_Final.Strength, "
                     "Stats_Final.Magic, "
@@ -119,7 +174,6 @@ QStringList DbAccess::GetInfoStat(QString name)
 
     if(query.exec())
     {
-
         while(query.next())
         {
                statInfo.append(query.value(0).toString()); //Stength
@@ -133,10 +187,8 @@ QStringList DbAccess::GetInfoStat(QString name)
 }
 
 
-
 QStringList DbAccess::GetInfoMagic(QString name)
 {
-    //Creating List and Query
     QStringList magicInfo;
     QSqlQuery query("SELECT Str_Wea_Final.Phys, "
                     "Str_Wea_Final.Gun, "
@@ -199,12 +251,10 @@ QMultiMap<QString,QString> DbAccess::GetPairs(QString arcana)
     return pairs;
 }
 
+
 QList<Persona> DbAccess::GetPersonas(QString first, QString resName)
 {
-
     QList<Persona> list;
-
-
 
     QSqlQuery queryFirst("SELECT Personas_Final.name, "
                          "Arcana.name, Personas_Final.Level, "
@@ -237,14 +287,13 @@ QList<Persona> DbAccess::GetPersonas(QString first, QString resName)
     }
 
     return list;
-
 }
-
 
 
 QList<int> DbAccess::GetArcanaLevels(QString arcana)
 {
     QList<int> levels;
+
     QSqlQuery query("SELECT Personas_Final.Level "
                     "FROM Personas_Final "
                     "INNER JOIN Arcana "
@@ -252,7 +301,6 @@ QList<int> DbAccess::GetArcanaLevels(QString arcana)
                     "WHERE Personas_Final.Spoiler = 'FALSE' "
                     "AND Arcana.Name = ?");
     query.addBindValue(arcana);
-
 
     if(query.exec())
     {
@@ -263,7 +311,6 @@ QList<int> DbAccess::GetArcanaLevels(QString arcana)
     }
     return levels;
 }
-
 
 
 int DbAccess::GetPK(QString name)
@@ -285,7 +332,6 @@ int DbAccess::GetPK(QString name)
     }
     return pK;
 }
-
 
 
 QStringList DbAccess::GetSpecialResults(int ID)

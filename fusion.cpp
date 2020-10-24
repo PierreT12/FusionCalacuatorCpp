@@ -10,13 +10,10 @@ DbAccess fusionAccess(path);
 Fusion::Fusion(Persona target)
 {
     m_target = target;
-
 }
 
 QMultiMap<QString, QString> Fusion::StartFusion(Persona target)
 {
-
-
     QStringList finalListMatch;
 
     QList<Persona> firstFullArcana;
@@ -43,7 +40,6 @@ QMultiMap<QString, QString> Fusion::StartFusion(Persona target)
 
         finalListMatch += fusionCheck(firstFullArcana,secondFullArcana, arcanaLvls, target);
     }
-
     return finalmatches;
 }
 
@@ -162,7 +158,6 @@ bool Fusion::FinalCheck(int calcLevel,
     }
     return correct;
 }
-
 
 
 bool Fusion::MathCheck(int calcLevel,

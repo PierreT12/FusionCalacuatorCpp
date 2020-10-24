@@ -14,18 +14,21 @@ SOURCES += \
     fusionpage.cpp \
     main.cpp \
     infowindow.cpp \
-    persona.cpp
+    persona.cpp \
+    settings.cpp
 
 HEADERS += \
     dbaccess.h \
     fusion.h \
     fusionpage.h \
     infowindow.h \
-    persona.h
+    persona.h \
+    settings.h
 
 FORMS += \
     fusionpage.ui \
-    infowindow.ui
+    infowindow.ui \
+    settings.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

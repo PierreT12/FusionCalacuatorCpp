@@ -7,6 +7,7 @@
 #include <QStandardItemModel>
 #include "fusionpage.h"
 #include "persona.h"
+#include "Settings.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class InfoWindow; }
@@ -34,13 +35,15 @@ private slots:
     void TheClick (QModelIndex);
     void FusionPress();
     void Exit();
+    void GiveData();
 //    void OpenAbout();
 //    void OpenHelp();
-//    void OpenSettings();
+    void OpenSettings();
 
 private:
     Ui::InfoWindow *ui;
     FusionPage *f;
+    Settings *s;
     QStringListModel *model;
     QStringList *list;
     QString m_path;

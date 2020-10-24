@@ -21,12 +21,15 @@ InfoWindow::InfoWindow(QWidget *parent)
  AddToView(DataConnection());
  SetTableViews();
 
+
+
+
 //All of signal/slot listeners(?)
 connect(ui-> fuisonButton, SIGNAL(clicked()), this, SLOT(FusionPress()));
 connect(ui-> actionExit, SIGNAL(triggered()), this, SLOT(Exit()));
 //connect(ui-> actionAbout, SIGNAL(triggered()), this, SLOT(OpenAbout));
 //connect(ui-> actionHelp, SIGNAL(triggered()), this, SLOT(OpenHelp));
-//connect(ui-> actionSettings, SIGNAL(triggered()), this, SLOT(OpenSettings));
+connect(ui-> actionSettings, SIGNAL(triggered()), this, SLOT(OpenSettings()));
 
 
 
@@ -41,7 +44,7 @@ QStringList InfoWindow::DataConnection()
 {
     QStringList list;
 
-    list = mainAccess.GetAll();
+    list = mainAccess.GetAllNoSpoilsDLC();
 
     return list;
 }
@@ -121,13 +124,41 @@ void InfoWindow::FusionPress()
     }
 }
 
+void InfoWindow::OpenSettings()
+{
+
+    s = new Settings(this);
+
+    s->show();
+
+
+
+
+
+
+}
 //MenuBar Button Presses
 void InfoWindow::Exit()
 {
     this->close();
 }
 
+void InfoWindow::GiveData()
+{
+    bool spoilers = s->returnSpoils();
+    bool dlc = s->returnDLC();
 
+    if(spoilers && dlc)
+        AddToView(mainAccess.GetAll());
+    else if(spoilers)
+       AddToView(mainAccess.GetAllSpoils());
+    else if(dlc)
+        AddToView(mainAccess.GetAllDLC());
+    else
+        AddToView(mainAccess.GetAllNoSpoilsDLC());
+
+
+}
 
 void InfoWindow::SetTableViews()
 {
