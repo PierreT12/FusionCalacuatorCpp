@@ -17,10 +17,10 @@ Loads in images properly for each persona
 Can open Fusion Page  
 Backwards Fusion  
 Special Fusion  
+Settings Page  
 
 # Features that need to be reimplemented
-Actually displaying Fusions to the UI  
-Settings Page  
+Actually displaying Fusions to the UI    
 Search Function
  
 
@@ -34,7 +34,7 @@ I might not do this, from what I understand, the results can be pretty random. I
 Inherited Skills  
 
 # Recent Changes
-Backwards & Special Fusion Works!!  
+Basic Settings Page  
 
 
 
