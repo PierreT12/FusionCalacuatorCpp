@@ -16,11 +16,10 @@ So I exported a pictureless version to CSV pages so people can actually see what
 # Current Features
 
 Displays Persona Information (Name, Acrana Level, Stat, Magic Etc.) from database  
-Loads in images properly for each persona
-Can open Fusion Page  
-Backwards Fusion  
+Loads in images properly for each persona  
+Backwards Fusions  
 Forward Fusions  
-Special Fusion  
+Special Fusions  
 Settings Page  
 Search Function
 
