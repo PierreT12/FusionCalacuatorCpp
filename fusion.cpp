@@ -28,6 +28,7 @@ QStringList Fusion::StartFusion(Persona target)
     arcanaLvls = fusionAccess.GetArcanaLevels(target.m_arcana);
     //Gets the Pair Aracna Matches from the Database
     matches = fusionAccess.GetPairs(target.m_arcana);
+    //matches.insert("Fool", "Fool");
 
 
     QMap<QString, QString>::iterator it;
@@ -304,15 +305,23 @@ int Fusion::RoundDown(int calcLevel,
 {
     int roundedLevel = 0;
 
-    for(int i = 1; i< arcanaLvls.count(); i++)
+
+    for(int i = 0; i< arcanaLvls.count(); i++)
     {
         if(arcanaLvls.at(i) < calcLevel &&
-           arcanaLvls.at(i + 1) >= calcLevel)
+           (arcanaLvls.at(i + 1) >= calcLevel))
         {
             if(arcanaLvls.at(i) == lvlFirst || arcanaLvls.at(i) == lvlSecond)
             {
-                roundedLevel = arcanaLvls.at(i - 1);
-                break;
+                if((i - 1) < 0)
+                    break;
+
+                else
+                {
+                    roundedLevel = arcanaLvls.at(i - 1);
+                    break;
+                }
+
             }
             else
             {
@@ -320,7 +329,15 @@ int Fusion::RoundDown(int calcLevel,
                 break;
             }
         }
+        else
+        {
+            if(arcanaLvls.at(i) == calcLevel ||
+               arcanaLvls.at(arcanaLvls.count() - 1) < calcLevel)
+                    break;
+
+        }
     }
+
 
     return roundedLevel;
 }
@@ -331,9 +348,9 @@ int Fusion::RoundUp(int calcLevel,
 {
     int roundedLevel = 0;
 
-    for(int i = 1; i< arcanaLvls.count(); i++)
+    for(int i = 0; i< arcanaLvls.count(); i++)
     {
-        if(arcanaLvls.at(i) > calcLevel)
+        if(arcanaLvls.at(i) >= calcLevel)
         {
             roundedLevel = arcanaLvls.at(i);
             break;
