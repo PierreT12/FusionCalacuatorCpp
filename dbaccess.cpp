@@ -1,18 +1,21 @@
 #include "dbaccess.h"
 
 
-DbAccess::DbAccess(const QString& path)
+DbAccess::DbAccess(){}
+
+
+void DbAccess::SetDatabaseName(const QString& path)
 {
-   m_db = QSqlDatabase::addDatabase("QSQLITE");
-   m_db.setDatabaseName(path);
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    m_db.setDatabaseName(path);
 
-   if (!m_db.open())
-      qDebug() << "Error: connection with database fail";
+    if (!m_db.open())
+       qDebug() << "Error: connection with database fail";
 
-   else
-      qDebug() << "Database: connection ok";
+    else
+       qDebug() << "Database: connection ok";
 }
-
+/////////////////////////////Settings for Listview Queries/////////////////////
 
 QStringList DbAccess::GetAllNoSpoilsDLC()
 {
@@ -69,7 +72,125 @@ QStringList DbAccess::GetAllSpoils()
     }
     return list;
 }
+///////////////////////////////////////////////////////////////////////////////
 
+
+///////////////////////////Search Queries/////////////////////////////////////
+
+QStringList DbAccess::NoSpoilDLCSearch(QString searchTerm)
+{
+    QStringList results;
+
+    searchTerm = "%" + searchTerm + "%";
+
+    QSqlQuery query("SELECT Personas_Final.Name "
+                    "FROM Personas_Final "
+                    "WHERE Personas_Final.Spoiler = 'FALSE'"
+                    "AND Personas_Final.DLC = 'FALSE'"
+                    "AND Personas_Final.Name LIKE ?"
+                    "ORDER BY Level ASC");
+        query.addBindValue(searchTerm);
+
+
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            QString name = query.value(0).toString();
+               results.append(name);
+        }
+    }
+
+
+
+    return results;
+}
+
+QStringList DbAccess::NoSpoilSearch(QString searchTerm)
+{
+    QStringList results;
+    searchTerm = "%" + searchTerm + "%";
+
+    QSqlQuery query("Select Name "
+                    "FROM Personas_Final "
+                    "WHERE Personas_Final.Spoiler = 'FALSE' "
+                    "AND Personas_Final.Name LIKE ? "
+                    "ORDER BY Level ASC");
+        query.addBindValue(searchTerm);
+
+        if(query.exec())
+        {
+            while(query.next())
+            {
+                QString name = query.value(0).toString();
+                   results.append(name);
+            }
+        }
+
+
+
+    return results;
+}
+
+QStringList DbAccess::NoDLCSearch(QString searchTerm)
+{
+    QStringList results;
+
+    searchTerm = "%" + searchTerm + "%";
+
+    QSqlQuery query("Select Name "
+                    "FROM Personas_Final "
+                    "WHERE Personas_Final.DLC = 'FALSE' "
+                    "AND Personas_Final.Name LIKE ? "
+                    "ORDER BY Level ASC");
+    query.addBindValue(searchTerm);
+
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            QString name = query.value(0).toString();
+               results.append(name);
+        }
+    }
+
+
+
+
+    return results;
+}
+
+QStringList DbAccess::AllSearch(QString searchTerm)
+{
+    QStringList results;
+
+    searchTerm = "%" + searchTerm + "%";
+
+    QSqlQuery query("Select Name "
+                    "FROM Personas_Final "
+                    "WHERE Personas_Final.Name LIKE ?"
+                    "ORDER BY Level ASC");
+    query.addBindValue(searchTerm);
+
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            QString name = query.value(0).toString();
+               results.append(name);
+        }
+    }
+
+
+
+
+    return results;
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////Displaying to Listview Queiers////////////////////
 
 QStringList DbAccess::GetAll()
 {
@@ -225,8 +346,14 @@ QStringList DbAccess::GetInfoMagic(QString name)
     }
     return magicInfo;
 }
+//////////////////////////////////////////////////////////////////////////
 
 
+////////////////////////Fusion Queries///////////////////////////////////
+
+
+
+                    //Normal Fusion Queries//
 QMultiMap<QString,QString> DbAccess::GetPairs(QString arcana)
 {
     QMultiMap<QString,QString> pairs;
@@ -250,7 +377,6 @@ QMultiMap<QString,QString> DbAccess::GetPairs(QString arcana)
     }
     return pairs;
 }
-
 
 QList<Persona> DbAccess::GetPersonas(QString first, QString resName)
 {
@@ -289,7 +415,6 @@ QList<Persona> DbAccess::GetPersonas(QString first, QString resName)
     return list;
 }
 
-
 QList<int> DbAccess::GetArcanaLevels(QString arcana)
 {
     QList<int> levels;
@@ -299,6 +424,7 @@ QList<int> DbAccess::GetArcanaLevels(QString arcana)
                     "INNER JOIN Arcana "
                     "ON Arcana.Arcana_ID = Personas_Final.Arcana "
                     "WHERE Personas_Final.Spoiler = 'FALSE' "
+                    "AND Personas_Final.Fuseable = 'TRUE' "
                     "AND Arcana.Name = ?");
     query.addBindValue(arcana);
 
@@ -312,6 +438,9 @@ QList<int> DbAccess::GetArcanaLevels(QString arcana)
     return levels;
 }
 
+
+
+                    //Special Fusion Queries//
 
 int DbAccess::GetPK(QString name)
 {
@@ -332,7 +461,6 @@ int DbAccess::GetPK(QString name)
     }
     return pK;
 }
-
 
 QStringList DbAccess::GetSpecialResults(int ID)
 {
@@ -359,3 +487,117 @@ QStringList DbAccess::GetSpecialResults(int ID)
     qDebug() << results;
     return results;
 }
+
+
+
+
+                    //Forward Fusion Queries//
+
+QList<Persona> DbAccess::FFGetPersonas(Persona p1)
+{
+    QList<Persona> list;
+
+    QSqlQuery query("SELECT Personas_Final.name, "
+                    "Arcana.name, "
+                    "Personas_Final.Level F"
+                    "ROM Personas_Final "
+                    "INNER JOIN Arcana "
+                    "ON Arcana.Arcana_ID = Personas_Final.Arcana "
+                    "WHERE Personas_Final.Fuseable = 'TRUE' "
+                    "AND Personas_Final.Name != ?");
+    query.addBindValue(p1.m_name);
+
+
+    if(query.exec())
+    {
+        Persona tempPers;
+        QString temp;
+
+        while(query.next())
+        {
+            tempPers.m_name = query.value(0).toString();
+            tempPers.m_arcana = query.value(1).toString();
+            temp = query.value(2).toString();
+            tempPers.m_level = temp.toUInt();
+
+            list.append(tempPers);
+        }
+    }
+
+    return list;
+}
+
+QString DbAccess::GetTarget(QString firstArc, QString secondArc)
+{
+    QString results;
+    QSqlQuery query("SELECT Arcana.Name "
+                    "FROM PairConnection "
+                    "INNER JOIN Pairs "
+                    "ON Pairs.Pair_ID = PairConnection.Pair_ID "
+                    "INNER JOIN Arcana "
+                    "ON Arcana.Arcana_ID = PairConnection.Arcana_ID "
+                    "WHERE Pairs.First_Arcana = ? "
+                    "AND Pairs.Second_Arcana = ?");
+    query.addBindValue(firstArc);
+    query.addBindValue(secondArc);
+
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            results = query.value(0).toString();
+        }
+    }
+
+    return results;
+}
+
+
+Persona DbAccess::GetResultPersona(QString arcana, int level)
+{
+    Persona result;
+    QSqlQuery query("SELECT Personas_Final.name, "
+                    "Arcana.name, "
+                    "Personas_Final.Level, "
+                    "Personas_Final.Fuseable, "
+                    "Personas_Final.SpecialFusion, "
+                    "Personas_Final.Max_SL "
+                    "FROM Personas_Final "
+                    "INNER JOIN Arcana "
+                    "ON Arcana.Arcana_ID = Personas_Final.Arcana "
+                    "WHERE Arcana.Name = ? "
+                    "AND Personas_Final.Fuseable = 'TRUE' "
+                    "AND Personas_Final.Spoiler = 'FALSE' "
+                    "AND Personas_Final.Level = ?");
+    query.addBindValue(arcana);
+    query.addBindValue(level);
+
+
+    if(query.exec())
+    {
+
+        while(query.next())
+        {
+
+            QString temp;
+            result.m_name = query.value(0).toString();    //Name
+            result.m_arcana = query.value(1).toString();  //Arcana
+            result.m_level = temp.toUInt();              //Level
+            result.m_fuseable = query.value(3).toBool(); //Fuseable
+            result.m_sFusion = query.value(4).toBool(); //Special Fusion
+            result.m_maxSL = query.value(5).toBool(); //Max Social Link
+
+
+        }
+
+    }
+
+
+
+
+
+
+
+    return result;
+}
+/////////////////////////////////////////////////////////////////////////////

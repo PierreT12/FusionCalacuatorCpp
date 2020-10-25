@@ -5,6 +5,7 @@
 #include <QStringListModel>
 #include <QStringList>
 #include <QStandardItemModel>
+#include <QDir>
 #include "fusionpage.h"
 #include "persona.h"
 #include "Settings.h"
@@ -34,6 +35,8 @@ public:
 private slots:
     void TheClick (QModelIndex);
     void FusionPress();
+    void ForwardPress();
+    void SearchPress();
     void Exit();
     void GiveData();
 //    void OpenAbout();
@@ -47,6 +50,7 @@ private:
     QStringListModel *model;
     QStringList *list;
     QString m_path;
+    DbAccess mainAccess;
     QStandardItemModel *modelTableStat;
     QStandardItemModel *modelTableMagic;
     Persona selection;

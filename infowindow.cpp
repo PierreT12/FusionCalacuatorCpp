@@ -3,21 +3,25 @@
 #include "dbaccess.h"
 
 
-QString m_path = "C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\SQL_FILES\\finaL_Database_2.db";
 
 
+//Need to be global because
+//three diff methods use
+bool showspoilers = false;
+bool showdlc = false;
 
-//Connects to the database as soon as the program runs for the first time
-//Needs to be global to this class so other methods can call it
-//Otherwise server will keep randomly ending connections
-DbAccess mainAccess(m_path);
+
 
 InfoWindow::InfoWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::InfoWindow)
 {
-    ui->setupUi(this);
+ m_path = QDir::currentPath() + "/final_Database_2.db";
 
+   mainAccess.SetDatabaseName(m_path);
+
+    ui->setupUi(this);
+qDebug() << "App path : " << m_path;
  AddToView(DataConnection());
  SetTableViews();
 
@@ -26,6 +30,8 @@ InfoWindow::InfoWindow(QWidget *parent)
 
 //All of signal/slot listeners(?)
 connect(ui-> fuisonButton, SIGNAL(clicked()), this, SLOT(FusionPress()));
+connect(ui->forwardFusion, SIGNAL(clicked()), this, SLOT(ForwardPress()));
+connect(ui->searchBtn, SIGNAL(clicked()), this, SLOT(SearchPress()));
 connect(ui-> actionExit, SIGNAL(triggered()), this, SLOT(Exit()));
 //connect(ui-> actionAbout, SIGNAL(triggered()), this, SLOT(OpenAbout));
 //connect(ui-> actionHelp, SIGNAL(triggered()), this, SLOT(OpenHelp));
@@ -43,7 +49,6 @@ InfoWindow::~InfoWindow()
 QStringList InfoWindow::DataConnection()
 {
     QStringList list;
-
     list = mainAccess.GetAllNoSpoilsDLC();
 
     return list;
@@ -119,11 +124,63 @@ void InfoWindow::FusionPress()
     }
     else
     {
+        this->setCursor(Qt::WaitCursor);
         f->GetResultArcana(selection);
         f->show();
+        this->setCursor(Qt::ArrowCursor);
+    }
+
+
+
+
+}
+
+void InfoWindow::ForwardPress()
+{
+
+    f = new FusionPage(this);
+
+    if(!selection.m_fuseable && !selection.m_spoiler)
+    {
+        QMessageBox noFuse;
+        noFuse.setText("Sorry this Persona cannot be fused.");
+        noFuse.setInformativeText("Please try a different Persona!");
+        noFuse.setIcon(QMessageBox::Critical);
+        noFuse.exec();
+    }
+    else
+    {
+        this->setCursor(Qt::WaitCursor);
+        f->FuseForward(selection);
+        f->show();
+        this->setCursor(Qt::ArrowCursor);
     }
 }
 
+void InfoWindow::SearchPress()
+{
+    QString search = ui->serachBox->text();
+    if(showspoilers && showdlc)
+        AddToView(mainAccess.AllSearch(search));
+
+    else if(showspoilers)
+        AddToView(mainAccess.NoDLCSearch(search));
+
+    else if (showdlc)
+        AddToView(mainAccess.NoSpoilSearch(search));
+
+    else
+        AddToView(mainAccess.NoSpoilDLCSearch(search));
+
+}
+
+
+
+//MenuBar Button Presses
+void InfoWindow::Exit()
+{
+    this->close();
+}
 void InfoWindow::OpenSettings()
 {
 
@@ -131,28 +188,18 @@ void InfoWindow::OpenSettings()
 
     s->show();
 
-
-
-
-
-
-}
-//MenuBar Button Presses
-void InfoWindow::Exit()
-{
-    this->close();
 }
 
 void InfoWindow::GiveData()
 {
-    bool spoilers = s->returnSpoils();
-    bool dlc = s->returnDLC();
+    showspoilers = s->returnSpoils();
+    showdlc = s->returnDLC();
 
-    if(spoilers && dlc)
+    if(showspoilers && showdlc)
         AddToView(mainAccess.GetAll());
-    else if(spoilers)
+    else if(showspoilers)
        AddToView(mainAccess.GetAllSpoils());
-    else if(dlc)
+    else if(showdlc)
         AddToView(mainAccess.GetAllDLC());
     else
         AddToView(mainAccess.GetAllNoSpoilsDLC());
@@ -160,10 +207,11 @@ void InfoWindow::GiveData()
 
 }
 
+
 void InfoWindow::SetTableViews()
 {
 
-    QStringList stats;
+    QStringList statsHeader;
     QStringList magic;
     QStringList statBasic;
     QStringList magicBasic;
@@ -171,7 +219,7 @@ void InfoWindow::SetTableViews()
     modelTableStat = new QStandardItemModel(5,2,this);
     modelTableMagic = new QStandardItemModel(10,2,this);
 
-    stats <<"Stat" << "Value";
+    statsHeader <<"Stat" << "Value";
 
     statBasic << "Strength"
               << "Magic"
@@ -179,7 +227,7 @@ void InfoWindow::SetTableViews()
               << "Agility"
               << "Luck";
 
-    modelTableStat->setHorizontalHeaderLabels(stats);
+    modelTableStat->setHorizontalHeaderLabels(statsHeader);
 
     ui ->statView ->setModel(modelTableStat);
     AddToUi(modelTableStat, statBasic);
@@ -213,6 +261,7 @@ void InfoWindow::SetTableViews()
 
 
 }
+
 
 void InfoWindow::AddToUi(QStandardItemModel* models,
                          QStringList list)

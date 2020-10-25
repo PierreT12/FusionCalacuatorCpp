@@ -2,26 +2,25 @@
 #include <QtDebug>
 //Clean this up later
 
-QString path = "C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\SQL_FILES\\finaL_Database_2.db";
-
-DbAccess fusionAccess(path);
 
 
 Fusion::Fusion(Persona target)
 {
+    m_path = QDir::currentPath() + "/final_Database_2.db";
+    fusionAccess.SetDatabaseName(m_path);
     m_target = target;
 }
 
-QMultiMap<QString, QString> Fusion::StartFusion(Persona target)
+//Reverse Fusion
+QStringList Fusion::StartFusion(Persona target)
 {
-    QStringList finalListMatch;
+    QStringList finalMatch;
 
     QList<Persona> firstFullArcana;
     QList<Persona> secondFullArcana;
     QList<int> arcanaLvls;
 
     QMultiMap<QString,QString> matches;
-    QMultiMap<QString,QString> finalmatches;
 
 
 
@@ -38,14 +37,41 @@ QMultiMap<QString, QString> Fusion::StartFusion(Persona target)
         firstFullArcana = fusionAccess.GetPersonas(it.key(),target.m_name);
         secondFullArcana = fusionAccess.GetPersonas(it.value(), target.m_name);
 
-        finalListMatch += fusionCheck(firstFullArcana,secondFullArcana, arcanaLvls, target);
+        finalMatch+= FusionCheck(firstFullArcana,secondFullArcana, arcanaLvls, target);
     }
-    return finalmatches;
+    return finalMatch;
 }
 
-///Regular fusions
+//Forward Fusion
+//Change the return type later
+QStringList Fusion::StartForwardFusion(Persona p1)
+{
 
-QStringList Fusion::fusionCheck(QList<Persona> first,
+    QList<Persona> allPersonas;
+    QStringList finalMatch;
+    QString output;
+
+    allPersonas = fusionAccess.FFGetPersonas(p1);
+
+    QList<Persona>::iterator it;
+
+    for(int i = 0; i < allPersonas.size(); i++)
+    {
+        output = FFCheck(p1, allPersonas.at(i));
+        if(!output.isEmpty())
+        {
+            finalMatch.append(output);
+            qDebug() << output;
+        }
+    }
+
+
+    return finalMatch;
+}
+
+///Regular Fusions
+
+QStringList Fusion::FusionCheck(QList<Persona> first,
                                 QList<Persona> second,
                                 QList<int> arcanaLvls,
                                 Persona target)
@@ -97,9 +123,52 @@ QStringList Fusion::fusionCheck(QList<Persona> first,
     return finalListMatch;
 }
 
+///Forward Fusions
+QString Fusion::FFCheck(Persona p1, Persona p2)
+{
+    QString results;
+    QString targetArcana;
+    QList<int> arcanaLvls;
+    Persona outputPersona;
+    bool sameArcana;
+    int calcLevel;
+    int roundedLevel;
+
+    //Write a method that finds the target Arcana
+    //Probably a SQL Query
+    targetArcana = fusionAccess.GetTarget(p1.m_arcana, p2.m_arcana);
+    //Do a null and empty check
+    //Then do all the fun fusey stuff
+    if(!targetArcana.isEmpty())
+    {
+        arcanaLvls = fusionAccess.GetArcanaLevels(targetArcana);
+        sameArcana = SamePerArcana(p1, p2);
+        calcLevel = CalculateLevel(p1.m_level, p2.m_level);
+        roundedLevel = RoundType(calcLevel,
+                                 sameArcana,
+                                 p1,
+                                 p2,
+                                 arcanaLvls);
+
+        outputPersona = fusionAccess.GetResultPersona(targetArcana,roundedLevel);
+
+        if(!outputPersona.m_name.isEmpty())
+            results = p2.m_name + " : " + outputPersona.m_name;
+
+    }
+
+
+
+
+
+
+    return results;
+}
+
+
 ///Special Fusions
 
-QStringList Fusion::specialFusion(Persona target)
+QStringList Fusion::SpecialFusion(Persona target)
 {
     QStringList specialResults;
 

@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QLabel>
 #include <QMessageBox>
+#include <QStandardItemModel>
+#include <QDir>
 
 #include "persona.h"
 #include "fusion.h"
@@ -22,6 +24,8 @@ public:
     ~FusionPage();
    void GetResultArcana(Persona ResPersona);
    void StartFusion(Persona result);
+   void FuseForward(Persona p1);
+   void DisplayAllResults(QStringList finalResults);
 
 
 
@@ -30,6 +34,9 @@ private:
     Ui::FusionPage *ui;
     QLabel *label;
     Persona m_result;
+    QStandardItemModel *modelResults;
+    QString m_path;
+    DbAccess fusionAccess;
 
 
 };

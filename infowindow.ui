@@ -22,7 +22,7 @@
     <property name="geometry">
      <rect>
       <x>21</x>
-      <y>50</y>
+      <y>180</y>
       <width>401</width>
       <height>1261</height>
      </rect>
@@ -246,6 +246,52 @@
     </property>
     <property name="text">
      <string>Fuse This!</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="forwardFusion">
+    <property name="geometry">
+     <rect>
+      <x>1700</x>
+      <y>590</y>
+      <width>281</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Forward Fuse!</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="serachBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>30</y>
+      <width>401</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="searchBtn">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>130</y>
+      <width>401</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Search</string>
     </property>
    </widget>
   </widget>

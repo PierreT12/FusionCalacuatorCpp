@@ -1,8 +1,11 @@
 #ifndef FUSION_H
 #define FUSION_H
+#include <QMultiMap>
+#include <QDir>
+
 #include "persona.h"
 #include "dbaccess.h"
-#include <QMultiMap>
+
 
 class Fusion
 {
@@ -11,14 +14,18 @@ public:
 
 
    //Acutal Main Fusion Methods
-   QMultiMap<QString, QString> StartFusion(Persona final);
+   QStringList StartFusion(Persona target);
 
-   QStringList  fusionCheck(QList<Persona> first,
+   QStringList StartForwardFusion(Persona p1);
+
+   QStringList FusionCheck(QList<Persona> first,
                                            QList<Persona> second,
                                            QList<int> arcanaLvls,
                                            Persona target);
 
-   QStringList specialFusion(Persona target);
+   QStringList SpecialFusion(Persona target);
+
+   QString FFCheck(Persona p1, Persona p2);
 
    //Doing Queries or Math Methods
     bool SamePerArcana(Persona firstPer,
@@ -54,6 +61,8 @@ public:
 
 private:
     Persona m_target;
+    QString m_path;
+    DbAccess fusionAccess;
 
 
 };
