@@ -4,6 +4,9 @@ A remake of my [C# Fusion Calculator](https://github.com/PierreT12/FusionCalcula
 This is a Personal Project that I was working on in C# but I needed to transfer over to C++ for my Graduate School Portfolio.  
 Because most of the logic has already been written in C#, I just took that and implemented it in C++ and cleaned it up. All of the information relating to Personas is stored within a SQLite Database.  
 
+I've put more of my time into this project rather than my C# one, which is really messy.  
+So please look at this one if you want to see a good repesentation of my work!      
+
 Also please I apologize in advance if I make some common mistakes in C++. I'm self taught as of right now, but I will be taking a class in Spring 2021!  
 
 # SQLite Database
@@ -16,17 +19,16 @@ Displays Persona Information (Name, Acrana Level, Stat, Magic Etc.) from databas
 Loads in images properly for each persona
 Can open Fusion Page  
 Backwards Fusion  
+Forward Fusions  
 Special Fusion  
 Settings Page  
+Search Function
 
 # Features that need to be reimplemented
-Actually displaying Fusions to the UI    
-Search Function
- 
+All the old content has offically been reimplmented!!  
+
 
 # Needs New Logic entirely
-
-Forward Fusion  
 About Page   
 Treasure Demons  
 I might not do this, from what I understand, the results can be pretty random. If I have the time I'll give it a shot.  
@@ -34,7 +36,12 @@ I might not do this, from what I understand, the results can be pretty random. I
 Inherited Skills  
 
 # Recent Changes
-Basic Settings Page  
+Search Function  
+Forward Fusions  
+
+# Known Bugs
+Backwards Fusions on all Fool Arcana Personas causes a crash  
+
 
 
 
