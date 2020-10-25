@@ -34,12 +34,12 @@ I might not do this, from what I understand, the results can be pretty random. I
   
 Inherited Skills  
 
-# Recent Changes
-Search Function  
+# Recent Changes  
 Forward Fusions  
+Fixed Fool Bug  
 
 # Known Bugs
-Backwards Fusions on all Fool Arcana Personas causes a crash or the wrong results  
+Some personas can lag the program when clicked.  
 
 
 
