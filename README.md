@@ -39,7 +39,7 @@ Search Function
 Forward Fusions  
 
 # Known Bugs
-Backwards Fusions on all Fool Arcana Personas causes a crash  
+Backwards Fusions on all Fool Arcana Personas causes a crash or the wrong results  
 
 
 
