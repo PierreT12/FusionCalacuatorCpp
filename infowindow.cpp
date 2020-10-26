@@ -21,7 +21,7 @@ InfoWindow::InfoWindow(QWidget *parent)
    mainAccess.SetDatabaseName(m_path);
 
     ui->setupUi(this);
-qDebug() << "App path : " << m_path;
+
  AddToView(DataConnection());
  SetTableViews();
 
@@ -33,8 +33,8 @@ connect(ui-> fuisonButton, SIGNAL(clicked()), this, SLOT(FusionPress()));
 connect(ui->forwardFusion, SIGNAL(clicked()), this, SLOT(ForwardPress()));
 connect(ui->searchBtn, SIGNAL(clicked()), this, SLOT(SearchPress()));
 connect(ui-> actionExit, SIGNAL(triggered()), this, SLOT(Exit()));
-//connect(ui-> actionAbout, SIGNAL(triggered()), this, SLOT(OpenAbout));
-//connect(ui-> actionHelp, SIGNAL(triggered()), this, SLOT(OpenHelp));
+connect(ui-> actionAbout, SIGNAL(triggered()), this, SLOT(OpenAbout()));
+connect(ui-> actionHelp, SIGNAL(triggered()), this, SLOT(OpenHelp()));
 connect(ui-> actionSettings, SIGNAL(triggered()), this, SLOT(OpenSettings()));
 
 
@@ -66,7 +66,15 @@ void InfoWindow::AddToView(QStringList list)
         ui -> personaView ->setModel(model);
         //Sets up a listener to wait for the user to click on a persona
         ui->personaView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        connect(ui->personaView, SIGNAL(clicked(QModelIndex)),this,SLOT(TheClick(QModelIndex)));
+
+        //Create new Item Selection Model
+        selectionModel = ui->personaView->selectionModel();
+
+        //Takes Up/Down keys as well as clicking
+        connect(selectionModel,SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+        this,SLOT(TheClick(QModelIndex)));
+
+
 }
 
 ///All of the slot methods
@@ -96,7 +104,13 @@ void InfoWindow::TheClick (QModelIndex index)
     QString level = QString::number(selection.m_level);
     ui -> personaLevel->setText(level);
 
-    ui->personaImage->setPixmap(picture);
+
+
+
+    ui->personaImage->setPixmap(picture.scaled(ui->personaImage->size(),Qt::KeepAspectRatio));
+
+
+
     SetTableViews();
 
 
@@ -140,10 +154,10 @@ void InfoWindow::ForwardPress()
 
     f = new FusionPage(this);
 
-    if(!selection.m_fuseable && !selection.m_spoiler)
+    if(!selection.m_fuseable || !selection.m_spoiler)
     {
         QMessageBox noFuse;
-        noFuse.setText("Sorry this Persona cannot be fused.");
+        noFuse.setText("Sorry this Persona cannot be forward fused.");
         noFuse.setInformativeText("Please try a different Persona!");
         noFuse.setIcon(QMessageBox::Critical);
         noFuse.exec();
@@ -189,7 +203,17 @@ void InfoWindow::OpenSettings()
     s->show();
 
 }
+void InfoWindow::OpenAbout()
+{
+    a = new AboutPage(this);
 
+    a->show();
+}
+void InfoWindow::OpenHelp()
+{
+    h = new Help(this);
+    h->show();
+}
 void InfoWindow::GiveData()
 {
     showspoilers = s->returnSpoils();

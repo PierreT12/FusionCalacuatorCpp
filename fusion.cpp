@@ -54,7 +54,6 @@ QStringList Fusion::StartForwardFusion(Persona p1)
 
     allPersonas = fusionAccess.FFGetPersonas(p1);
 
-    QList<Persona>::iterator it;
 
     for(int i = 0; i < allPersonas.size(); i++)
     {
@@ -78,7 +77,6 @@ QStringList Fusion::FusionCheck(QList<Persona> first,
                                 Persona target)
 {
     QString results;
-    //Need a quick way to see if each is unique
     QStringList finalListMatch;
     bool sameArcana;
     bool correctLevel;
@@ -248,7 +246,6 @@ bool Fusion::MathCheck(int calcLevel,
 
 ///Level Calculation and Rounding Methods///
 
-//Make it look pretty
 int Fusion::CalculateLevel(int first,
                            int second)
 {
@@ -259,7 +256,7 @@ int Fusion::CalculateLevel(int first,
     templevel = (first + second);
     templevel = templevel/2;
 
-    //Checking to see if the number needs to have the 0.5 or 1 added
+    //Checking to see if the number is whole or not
     if(floor(templevel) == templevel)
         templevel = templevel + 1;
 
@@ -315,13 +312,11 @@ int Fusion::RoundDown(int calcLevel,
             {
                 if((i - 1) < 0)
                     break;
-
                 else
                 {
                     roundedLevel = arcanaLvls.at(i - 1);
                     break;
                 }
-
             }
             else
             {

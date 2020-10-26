@@ -6,9 +6,13 @@
 #include <QStringList>
 #include <QStandardItemModel>
 #include <QDir>
+#include <QItemSelectionModel>
+
 #include "fusionpage.h"
 #include "persona.h"
 #include "Settings.h"
+#include "aboutpage.h"
+#include "helppage.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class InfoWindow; }
@@ -39,15 +43,18 @@ private slots:
     void SearchPress();
     void Exit();
     void GiveData();
-//    void OpenAbout();
-//    void OpenHelp();
+    void OpenAbout();
+    void OpenHelp();
     void OpenSettings();
 
 private:
     Ui::InfoWindow *ui;
     FusionPage *f;
     Settings *s;
+    AboutPage *a;
+    Help *h;
     QStringListModel *model;
+    QItemSelectionModel *selectionModel;
     QStringList *list;
     QString m_path;
     DbAccess mainAccess;

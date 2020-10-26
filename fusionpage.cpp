@@ -6,6 +6,7 @@ FusionPage::FusionPage(QWidget *parent) :
     ui(new Ui::FusionPage)
 {
     ui->setupUi(this);
+     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
      m_path = QDir::currentPath() + "/final_Database_2.db";
      fusionAccess.SetDatabaseName(m_path);
 }
