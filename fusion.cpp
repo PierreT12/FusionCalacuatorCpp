@@ -6,13 +6,13 @@
 
 Fusion::Fusion(Persona target)
 {
-    m_path = QDir::currentPath() + "/final_Database_2.db";
+    //Sets up the database
+    m_path = QDir::currentPath() + "/Resources/final_Database_2.db";
     fusionAccess.SetDatabaseName(m_path);
-    m_target = target;
 }
 
 //Reverse Fusion
-QStringList Fusion::StartFusion(Persona target)
+QStringList Fusion::StartFusion(Persona target, bool filter)
 {
     QStringList finalMatch;
 
@@ -25,18 +25,31 @@ QStringList Fusion::StartFusion(Persona target)
 
 
     //Gets a list of levels for the Target Aracana from the Database
-    arcanaLvls = fusionAccess.GetArcanaLevels(target.m_arcana);
+    if(filter)
+        arcanaLvls = fusionAccess.GetArcanaLevels(target.m_arcana);
+    else
+        arcanaLvls = fusionAccess.GetArcanaLevelsNoDLC(target.m_arcana);
+
     //Gets the Pair Aracna Matches from the Database
     matches = fusionAccess.GetPairs(target.m_arcana);
-    //matches.insert("Fool", "Fool");
+
 
 
     QMap<QString, QString>::iterator it;
 
     for(it = matches.begin(); it != matches.end(); ++it)
     {
-        firstFullArcana = fusionAccess.GetPersonas(it.key(),target.m_name);
-        secondFullArcana = fusionAccess.GetPersonas(it.value(), target.m_name);
+        if(filter)
+        {
+            firstFullArcana = fusionAccess.GetPersonas(it.key(),target.m_name);
+            secondFullArcana = fusionAccess.GetPersonas(it.value(), target.m_name);
+        }
+        else
+        {
+            firstFullArcana = fusionAccess.GetPersonasNoDLC(it.key(),target.m_name);
+            secondFullArcana = fusionAccess.GetPersonasNoDLC(it.value(), target.m_name);
+        }
+
 
         finalMatch+= FusionCheck(firstFullArcana,secondFullArcana, arcanaLvls, target);
     }
@@ -44,20 +57,23 @@ QStringList Fusion::StartFusion(Persona target)
 }
 
 //Forward Fusion
-//Change the return type later
-QStringList Fusion::StartForwardFusion(Persona p1)
+
+QStringList Fusion::StartForwardFusion(Persona p1, bool filter)
 {
 
     QList<Persona> allPersonas;
     QStringList finalMatch;
     QString output;
 
-    allPersonas = fusionAccess.FFGetPersonas(p1);
+    if(filter)
+        allPersonas = fusionAccess.FFGetPersonas(p1);
+    else
+        allPersonas = fusionAccess.FFGetPersonasNoDLC(p1);
 
 
     for(int i = 0; i < allPersonas.size(); i++)
     {
-        output = FFCheck(p1, allPersonas.at(i));
+        output = FFCheck(p1, allPersonas.at(i), filter);
         if(!output.isEmpty())
         {
             finalMatch.append(output);
@@ -83,6 +99,7 @@ QStringList Fusion::FusionCheck(QList<Persona> first,
     int calcLevel;
     int roundedLevel;
 
+    //Nested for loops so that every possible combo is checked
     for(int i = 0; i < first.size(); i++)
     {
         for(int k = 0; k < second.size(); k++)
@@ -123,7 +140,7 @@ QStringList Fusion::FusionCheck(QList<Persona> first,
 }
 
 ///Forward Fusions
-QString Fusion::FFCheck(Persona p1, Persona p2)
+QString Fusion::FFCheck(Persona p1, Persona p2, bool filter)
 {
     QString results;
     QString targetArcana;
@@ -133,9 +150,8 @@ QString Fusion::FFCheck(Persona p1, Persona p2)
     int calcLevel;
     int roundedLevel;
 
-    //Write a method that finds the target Arcana
-    //Probably a SQL Query
     targetArcana = fusionAccess.GetTarget(p1.m_arcana, p2.m_arcana);
+
     //Do a null and empty check
     //Then do all the fun fusey stuff
     if(!targetArcana.isEmpty())
@@ -148,8 +164,10 @@ QString Fusion::FFCheck(Persona p1, Persona p2)
                                  p1,
                                  p2,
                                  arcanaLvls);
-
-        outputPersona = fusionAccess.GetResultPersona(targetArcana,roundedLevel);
+        if(filter)
+            outputPersona = fusionAccess.GetResultPersona(targetArcana,roundedLevel);
+        else
+            outputPersona = fusionAccess.GetResultPersonaNoDLC(targetArcana,roundedLevel);
 
         if(!outputPersona.m_name.isEmpty())
             results = p2.m_name + " : " + outputPersona.m_name;
@@ -184,6 +202,7 @@ QStringList Fusion::SpecialFusion(Persona target)
 ///Treasure Demon Fusions
 /// There is a set range of levels that could result,
 /// but all in all wont be very accurate
+/// Not planning on implementing it right now
 
 
 bool Fusion::SamePerArcana(Persona first,
@@ -281,6 +300,7 @@ int Fusion::RoundType(int calcLevel,
 {
 
     int roundedLevel;
+
     if(sameArcana)
         roundedLevel = RoundDown(calcLevel,
                                  first.m_level,

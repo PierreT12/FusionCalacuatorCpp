@@ -16,7 +16,7 @@ InfoWindow::InfoWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::InfoWindow)
 {
- m_path = QDir::currentPath() + "/final_Database_2.db";
+ m_path = QDir::currentPath() + "/Resources/final_Database_2.db";
 
    mainAccess.SetDatabaseName(m_path);
 
@@ -32,10 +32,13 @@ InfoWindow::InfoWindow(QWidget *parent)
 connect(ui-> fuisonButton, SIGNAL(clicked()), this, SLOT(FusionPress()));
 connect(ui->forwardFusion, SIGNAL(clicked()), this, SLOT(ForwardPress()));
 connect(ui->searchBtn, SIGNAL(clicked()), this, SLOT(SearchPress()));
+connect(ui->serachBox, SIGNAL(returnPressed()),this, SLOT(SearchPress()));
 connect(ui-> actionExit, SIGNAL(triggered()), this, SLOT(Exit()));
 connect(ui-> actionAbout, SIGNAL(triggered()), this, SLOT(OpenAbout()));
 connect(ui-> actionHelp, SIGNAL(triggered()), this, SLOT(OpenHelp()));
 connect(ui-> actionSettings, SIGNAL(triggered()), this, SLOT(OpenSettings()));
+
+
 
 
 
@@ -139,7 +142,7 @@ void InfoWindow::FusionPress()
     else
     {
         this->setCursor(Qt::WaitCursor);
-        f->GetResultArcana(selection);
+        f->GetResultArcana(selection, SendBools());
         f->show();
         this->setCursor(Qt::ArrowCursor);
     }
@@ -165,7 +168,7 @@ void InfoWindow::ForwardPress()
     else
     {
         this->setCursor(Qt::WaitCursor);
-        f->FuseForward(selection);
+        f->FuseForward(selection, SendBools());
         f->show();
         this->setCursor(Qt::ArrowCursor);
     }
@@ -186,6 +189,16 @@ void InfoWindow::SearchPress()
     else
         AddToView(mainAccess.NoSpoilDLCSearch(search));
 
+}
+
+
+bool InfoWindow::SendBools()
+{
+    bool filter;
+
+    filter = showdlc;
+
+    return filter;
 }
 
 

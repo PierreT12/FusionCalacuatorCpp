@@ -38,9 +38,17 @@ public:
     QList<Persona> GetPersonas(QString first, QString resName);
     QList<int> GetArcanaLevels(QString arcana);
 
+    QList<Persona> GetPersonasNoDLC(QString first, QString resName);
+    QList<int> GetArcanaLevelsNoDLC(QString arcana);
+
     QList<Persona> FFGetPersonas(Persona p1);
     Persona GetResultPersona(QString arcana, int level);
     QString GetTarget(QString firstArc, QString secondArc);
+
+    QList<Persona> FFGetPersonasNoDLC(Persona p1);
+    Persona GetResultPersonaNoDLC(QString arcana, int level);
+
+
 
 
     int GetPK(QString name);

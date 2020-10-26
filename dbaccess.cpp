@@ -21,7 +21,8 @@ QStringList DbAccess::GetAllNoSpoilsDLC()
 {
     QStringList list;
 
-    QSqlQuery query("Select Name FROM Personas_Final "
+    QSqlQuery query("Select Name "
+                    "FROM Personas_Final "
                     "WHERE Personas_Final.Spoiler = 'FALSE'"
                     "AND Personas_Final.DLC = 'FALSE'"
                     "ORDER BY Level ASC ");
@@ -353,7 +354,7 @@ QStringList DbAccess::GetInfoMagic(QString name)
 
 
 
-                    //Normal Fusion Queries//
+///////////////////////Normal Fusion Queries////////////////////////////
 QMultiMap<QString,QString> DbAccess::GetPairs(QString arcana)
 {
     QMultiMap<QString,QString> pairs;
@@ -439,6 +440,73 @@ QList<int> DbAccess::GetArcanaLevels(QString arcana)
 }
 
 
+///////////////////////No DLC Normal Fusion Queries///////////////////////
+
+
+QList<Persona> DbAccess::GetPersonasNoDLC(QString first, QString resName)
+{
+    QList<Persona> list;
+
+    QSqlQuery queryFirst("SELECT Personas_Final.name, "
+                         "Arcana.name, Personas_Final.Level, "
+                         "Personas_Final.Fuseable, "
+                         "Personas_Final.SpecialFusion, "
+                         "Personas_Final.Max_SL "
+                         "FROM Personas_Final "
+                         "INNER JOIN Arcana "
+                         "ON Arcana.Arcana_ID = Personas_Final.Arcana "
+                         "WHERE Personas_Final.Fuseable = 'TRUE' "
+                         "AND Personas_Final.DLC = 'FALSE' "
+                         "AND Arcana.Name = ? "
+                         "AND Personas_Final.Name != ?");
+    queryFirst.addBindValue(first);
+    queryFirst.addBindValue(resName);
+
+    if(queryFirst.exec())
+    {
+        Persona tempPers;
+        QString temp;
+
+        while(queryFirst.next())
+        {
+            tempPers.m_name = queryFirst.value(0).toString();
+            tempPers.m_arcana = queryFirst.value(1).toString();
+            temp = queryFirst.value(2).toString();
+            tempPers.m_level = temp.toUInt();
+
+            list.append(tempPers);
+        }
+    }
+
+    return list;
+}
+
+
+QList<int> DbAccess::GetArcanaLevelsNoDLC(QString arcana)
+{
+    QList<int> levels;
+
+    QSqlQuery query("SELECT Personas_Final.Level "
+                    "FROM Personas_Final "
+                    "INNER JOIN Arcana "
+                    "ON Arcana.Arcana_ID = Personas_Final.Arcana "
+                    "WHERE Personas_Final.Spoiler = 'FALSE' "
+                    "AND Personas_Final.Fuseable = 'TRUE' "
+                    "AND Personas_Final.DLC = 'FALSE' "
+                    "AND Arcana.Name = ?");
+    query.addBindValue(arcana);
+
+    if(query.exec())
+    {
+        while(query.next())
+        {
+            levels.append(query.value(0).toInt());
+        }
+    }
+    return levels;
+}
+
+////////////////////////////////////////////////////////////////////////
 
                     //Special Fusion Queries//
 
@@ -491,16 +559,17 @@ QStringList DbAccess::GetSpecialResults(int ID)
 
 
 
-                    //Forward Fusion Queries//
+//////////////////////////Forward Fusion Queries//////////////////////////////
 
+            ////////////Normal All DLC////////////
 QList<Persona> DbAccess::FFGetPersonas(Persona p1)
 {
     QList<Persona> list;
 
     QSqlQuery query("SELECT Personas_Final.name, "
                     "Arcana.name, "
-                    "Personas_Final.Level F"
-                    "ROM Personas_Final "
+                    "Personas_Final.Level "
+                    "FROM Personas_Final "
                     "INNER JOIN Arcana "
                     "ON Arcana.Arcana_ID = Personas_Final.Arcana "
                     "WHERE Personas_Final.Fuseable = 'TRUE' "
@@ -552,7 +621,6 @@ QString DbAccess::GetTarget(QString firstArc, QString secondArc)
     return results;
 }
 
-
 Persona DbAccess::GetResultPersona(QString arcana, int level)
 {
     Persona result;
@@ -567,7 +635,8 @@ Persona DbAccess::GetResultPersona(QString arcana, int level)
                     "ON Arcana.Arcana_ID = Personas_Final.Arcana "
                     "WHERE Arcana.Name = ? "
                     "AND Personas_Final.Fuseable = 'TRUE' "
-                    "AND Personas_Final.Spoiler = 'FALSE' "
+                    "AND Personas_Final.Spoiler = 'FALSE'"
+                    "AND Personas_Final.SpecialFusion = 'FALSE' "
                     "AND Personas_Final.Level = ?");
     query.addBindValue(arcana);
     query.addBindValue(level);
@@ -600,4 +669,96 @@ Persona DbAccess::GetResultPersona(QString arcana, int level)
 
     return result;
 }
+
+
+
+           /////////////DLC Filtered Out/////////////
+QList<Persona> DbAccess::FFGetPersonasNoDLC(Persona p1)
+{
+    QList<Persona> list;
+
+    QSqlQuery query("SELECT Personas_Final.name, "
+                    "Arcana.name, "
+                    "Personas_Final.Level "
+                    "FROM Personas_Final "
+                    "INNER JOIN Arcana "
+                    "ON Arcana.Arcana_ID = Personas_Final.Arcana "
+                    "WHERE Personas_Final.Fuseable = 'TRUE' "
+                    "AND Personas_Final.DLC = 'FALSE' "
+                    "AND Personas_Final.Name != 'Satanael'"
+                    "AND Personas_Final.Name != ?");
+    query.addBindValue(p1.m_name);
+
+
+    if(query.exec())
+    {
+        Persona tempPers;
+        QString temp;
+
+        while(query.next())
+        {
+            tempPers.m_name = query.value(0).toString();
+            tempPers.m_arcana = query.value(1).toString();
+            temp = query.value(2).toString();
+            tempPers.m_level = temp.toUInt();
+
+            list.append(tempPers);
+        }
+    }
+
+    return list;
+}
+
+Persona DbAccess::GetResultPersonaNoDLC(QString arcana, int level)
+{
+    Persona result;
+    QSqlQuery query("SELECT Personas_Final.name, "
+                    "Arcana.name, "
+                    "Personas_Final.Level, "
+                    "Personas_Final.Fuseable, "
+                    "Personas_Final.SpecialFusion, "
+                    "Personas_Final.Max_SL "
+                    "FROM Personas_Final "
+                    "INNER JOIN Arcana "
+                    "ON Arcana.Arcana_ID = Personas_Final.Arcana "
+                    "WHERE Arcana.Name = ? "
+                    "AND Personas_Final.Fuseable = 'TRUE' "
+                    "AND Personas_Final.Spoiler = 'FALSE'"
+                    "AND Personas_Final.SpecialFusion = 'FALSE' "
+                    "AND Personas_Final.DLC = 'FALSE' "
+                    "AND Personas_Final.Level = ?");
+    query.addBindValue(arcana);
+    query.addBindValue(level);
+
+
+    if(query.exec())
+    {
+
+        while(query.next())
+        {
+
+            QString temp;
+            result.m_name = query.value(0).toString();    //Name
+            result.m_arcana = query.value(1).toString();  //Arcana
+            result.m_level = temp.toUInt();              //Level
+            result.m_fuseable = query.value(3).toBool(); //Fuseable
+            result.m_sFusion = query.value(4).toBool(); //Special Fusion
+            result.m_maxSL = query.value(5).toBool(); //Max Social Link
+
+
+        }
+
+    }
+
+
+
+
+
+
+
+    return result;
+}
+
+
+
 /////////////////////////////////////////////////////////////////////////////

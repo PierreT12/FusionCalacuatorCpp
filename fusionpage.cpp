@@ -7,7 +7,7 @@ FusionPage::FusionPage(QWidget *parent) :
 {
     ui->setupUi(this);
      this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-     m_path = QDir::currentPath() + "/final_Database_2.db";
+     m_path = QDir::currentPath() + "/Resources/final_Database_2.db";
      fusionAccess.SetDatabaseName(m_path);
 }
 
@@ -19,7 +19,7 @@ FusionPage::~FusionPage()
 
 
 
-void FusionPage::GetResultArcana(Persona ResPersona)
+void FusionPage::GetResultArcana(Persona ResPersona, bool filter)
 {
 
     QString level = QString::number(ResPersona.m_level);
@@ -29,28 +29,50 @@ void FusionPage::GetResultArcana(Persona ResPersona)
     ui->PerFLbl->setText(ResPersona.m_name);
     ui->perFLvlLbl->setText(level);
 
-   StartFusion(ResPersona);
+   StartFusion(ResPersona, filter);
 
 }
 
-void FusionPage::StartFusion(Persona result)
+void FusionPage::StartFusion(Persona result, bool filter)
 {
+
+
+
+
     Fusion fusion(result);
+
     QStringList finalResults;
+    QString text;
 
-    if(result.m_sFusion)
-      finalResults = fusion.SpecialFusion(result);
 
+
+    if(result.m_maxSL)
+    {
+        text = "This Persona requires a Max Social Link!";
+        ui->mlLbl->setText(text);
+
+        if(result.m_sFusion)
+        {
+            text = "This is a Special Fusion "
+                          "All of these Personas are required!";
+            ui->spFusion->setText(text);
+            finalResults = fusion.SpecialFusion(result);
+        }
+        else
+            finalResults = fusion.StartFusion(result,filter);
+
+
+    }
     else
-       finalResults = fusion.StartFusion(result);
+       finalResults = fusion.StartFusion(result,filter);
+
 
     DisplayAllResults(finalResults);
 
-    //Do Treasure fusions
 
 }
 
-void FusionPage::FuseForward(Persona p1)
+void FusionPage::FuseForward(Persona p1, bool filter)
 {
     Fusion fusion(p1);
     QStringList finalResults;
@@ -66,7 +88,8 @@ void FusionPage::FuseForward(Persona p1)
 
 
 
-   finalResults = fusion.StartForwardFusion(p1);
+   finalResults = fusion.StartForwardFusion(p1, filter);
+
    DisplayAllResults(finalResults);
 }
 

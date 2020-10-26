@@ -16,14 +16,25 @@ int main(int argc, char *argv[])
     InfoWindow w;
 
 
+    QString path = QDir::currentPath() + "/Resources/header.png";
+    qDebug() << "App path : " << path;
     //Variables for FusionPage
-    QIcon icon ("C:\\Users\\Treffy\\Desktop\\Pesonal_Project\\Pesonal_Project\\Persona_Images\\header.png");
+    QIcon icon (path);
 
 
 
     //Icon Set up
     w.setWindowIcon(icon);
 
+    QMessageBox m;
+    m.setText("Welcome!");
+    m.setInformativeText("If you’re unfamiliar with how \n"
+                         "a Persona/SMT fusion calculator works, \n"
+                         "I really recommend that you checking "
+                         "under Settings>Help, to get a basic understanding. \n \n"
+                         "Thank you for trying my program!");
+    m.setIcon(QMessageBox::Information);
+    m.exec();
 
 
 

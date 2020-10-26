@@ -14,9 +14,9 @@ public:
 
 
    //Acutal Main Fusion Methods
-   QStringList StartFusion(Persona target);
+   QStringList StartFusion(Persona target, bool filter);
 
-   QStringList StartForwardFusion(Persona p1);
+   QStringList StartForwardFusion(Persona p1, bool filter);
 
    QStringList FusionCheck(QList<Persona> first,
                                            QList<Persona> second,
@@ -25,7 +25,7 @@ public:
 
    QStringList SpecialFusion(Persona target);
 
-   QString FFCheck(Persona p1, Persona p2);
+   QString FFCheck(Persona p1, Persona p2, bool filter);
 
    //Doing Queries or Math Methods
     bool SamePerArcana(Persona firstPer,
@@ -60,7 +60,6 @@ public:
 
 
 private:
-    Persona m_target;
     QString m_path;
     DbAccess fusionAccess;
 

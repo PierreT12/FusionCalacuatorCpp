@@ -7,9 +7,11 @@
 #include <QStandardItemModel>
 #include <QDir>
 
+
 #include "persona.h"
 #include "fusion.h"
-#include "multithreadfusion.h"
+//Causes errors :{
+//#include "infowindow.h"
 
 namespace Ui {
 class FusionPage;
@@ -22,9 +24,9 @@ class FusionPage : public QDialog
 public:
     explicit FusionPage(QWidget *parent = nullptr);
     ~FusionPage();
-   void GetResultArcana(Persona ResPersona);
-   void StartFusion(Persona result);
-   void FuseForward(Persona p1);
+   void GetResultArcana(Persona ResPersona, bool filter);
+   void StartFusion(Persona result, bool filter);
+   void FuseForward(Persona p1, bool filter);
    void DisplayAllResults(QStringList finalResults);
 
 

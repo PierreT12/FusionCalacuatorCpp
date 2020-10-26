@@ -34,7 +34,7 @@ public:
     void AddToUiInfo(QStandardItemModel* models,
                      QStringList list);
 
-
+    bool SendBools();
 
 private slots:
     void TheClick (QModelIndex);
