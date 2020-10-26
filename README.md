@@ -21,6 +21,7 @@ Backwards Fusions
 Forward Fusions  
 Special Fusions  
 Settings Page  
+About Page  
 Search Function
 
 # Features that need to be reimplemented
@@ -28,7 +29,7 @@ All the old content has offically been reimplmented!!
 
 
 # Needs New Logic entirely
-About Page   
+   
 Treasure Demons  
 I might not do this, from what I understand, the results can be pretty random. If I have the time I'll give it a shot.  
   
