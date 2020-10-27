@@ -24,6 +24,7 @@ QStringList Fusion::StartFusion(Persona target, bool filter)
 
 
 
+
     //Gets a list of levels for the Target Aracana from the Database
     if(filter)
         arcanaLvls = fusionAccess.GetArcanaLevels(target.m_arcana);
@@ -41,6 +42,7 @@ QStringList Fusion::StartFusion(Persona target, bool filter)
     {
         if(filter)
         {
+
             firstFullArcana = fusionAccess.GetPersonas(it.key(),target.m_name);
             secondFullArcana = fusionAccess.GetPersonas(it.value(), target.m_name);
         }
@@ -99,9 +101,13 @@ QStringList Fusion::FusionCheck(QList<Persona> first,
     int calcLevel;
     int roundedLevel;
 
+
+
+
     //Nested for loops so that every possible combo is checked
     for(int i = 0; i < first.size(); i++)
     {
+
         for(int k = 0; k < second.size(); k++)
         {
             if(!first.at(i).m_name.contains(second.at(k).m_name))
@@ -377,3 +383,7 @@ int Fusion::RoundUp(int calcLevel,
 
     return roundedLevel;
 }
+
+
+
+

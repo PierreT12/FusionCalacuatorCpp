@@ -16,28 +16,36 @@ InfoWindow::InfoWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::InfoWindow)
 {
- m_path = QDir::currentPath() + "/Resources/final_Database_2.db";
 
-   mainAccess.SetDatabaseName(m_path);
+    //Database default set up
+    m_path = QDir::currentPath() + "/Resources/final_Database_2.db";
+    mainAccess.SetDatabaseName(m_path);
 
     ui->setupUi(this);
 
- AddToView(DataConnection());
- SetTableViews();
+    //Adds all Personas to View
+    AddToView(DataConnection());
+
+    //Sets up the default Stat & Weakness tables
+    SetTableViews();
 
 
 
 
-//All of signal/slot listeners(?)
-connect(ui-> fuisonButton, SIGNAL(clicked()), this, SLOT(FusionPress()));
-connect(ui->forwardFusion, SIGNAL(clicked()), this, SLOT(ForwardPress()));
-connect(ui->searchBtn, SIGNAL(clicked()), this, SLOT(SearchPress()));
-connect(ui->serachBox, SIGNAL(returnPressed()),this, SLOT(SearchPress()));
-connect(ui-> actionExit, SIGNAL(triggered()), this, SLOT(Exit()));
-connect(ui-> actionAbout, SIGNAL(triggered()), this, SLOT(OpenAbout()));
-connect(ui-> actionHelp, SIGNAL(triggered()), this, SLOT(OpenHelp()));
-connect(ui-> actionSettings, SIGNAL(triggered()), this, SLOT(OpenSettings()));
+//////////////All of signal/slot listeners///////////////////////////////
 
+          /////////////Waits for mouse click//////////////////
+    connect(ui-> fuisonButton, SIGNAL(clicked()), this, SLOT(FusionPress()));
+    connect(ui->forwardFusion, SIGNAL(clicked()), this, SLOT(ForwardPress()));
+    connect(ui->searchBtn, SIGNAL(clicked()), this, SLOT(SearchPress()));
+    connect(ui-> actionExit, SIGNAL(triggered()), this, SLOT(Exit()));
+    connect(ui-> actionAbout, SIGNAL(triggered()), this, SLOT(OpenAbout()));
+    connect(ui-> actionHelp, SIGNAL(triggered()), this, SLOT(OpenHelp()));
+    connect(ui-> actionSettings, SIGNAL(triggered()), this, SLOT(OpenSettings()));
+        /////////Waits for Enter to be pressed/////////
+    connect(ui->serachBox, SIGNAL(returnPressed()),this, SLOT(SearchPress()));
+
+/////////////////////////////////////////////////////////////////////////
 
 
 
@@ -49,6 +57,11 @@ InfoWindow::~InfoWindow()
     delete ui;
 }
 
+
+
+//When the database connects for the first time
+//returns a list of all of the personas
+//with the No DLC, No Spoiler filter
 QStringList InfoWindow::DataConnection()
 {
     QStringList list;
@@ -57,20 +70,25 @@ QStringList InfoWindow::DataConnection()
     return list;
 }
 
+
+
+//Adds the DataConnection() List to the ListView
 void InfoWindow::AddToView(QStringList list)
 {
         // Create model for list
         model = new QStringListModel(this);
+
         //Add Data to the model
         model->setStringList(list);
 
         //Attach Model to ListView
-        //This will cause Personas to acutally Display
+        //So user can see the list of Personas
         ui -> personaView ->setModel(model);
-        //Sets up a listener to wait for the user to click on a persona
+
+
         ui->personaView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-        //Create new Item Selection Model
+        //Create new Item Selection Model and ties it to the listview
         selectionModel = ui->personaView->selectionModel();
 
         //Takes Up/Down keys as well as clicking
@@ -80,20 +98,23 @@ void InfoWindow::AddToView(QStringList list)
 
 }
 
-///All of the slot methods
-//Button/ListView Presses on InfoPage
+////////////All of the slot methods////////////////////
+
+
+
 void InfoWindow::TheClick (QModelIndex index)
 {
-    //Variables that'll get instanced in a hot sec
+
     QPixmap picture;
     modelTableStat = new QStandardItemModel(5,2,this);
     modelTableMagic = new QStandardItemModel(10,2,this);
     QStringList stats;
     QStringList magic;
 
-    //Cast model to QStringModel
-    QStringListModel* listModel= qobject_cast<QStringListModel*>(ui->personaView ->model());
+    //Cast model to QStringModel so program can get information from it
+    listModel= qobject_cast<QStringListModel*>(ui->personaView ->model());
 
+    //Need this to query the database
     QString name = listModel->stringList().at(index.row());
 
     //Gets the selected persona from the database
@@ -103,11 +124,10 @@ void InfoWindow::TheClick (QModelIndex index)
     //Displays all of the basic Persona Info to the InfoWindow
     ui ->personaName->setText(selection.m_name);
     ui ->personaArcana->setText(selection.m_arcana);
-    //Have to convert back to a string
+
+    //level needs to be a QString again :/
     QString level = QString::number(selection.m_level);
     ui -> personaLevel->setText(level);
-
-
 
 
     ui->personaImage->setPixmap(picture.scaled(ui->personaImage->size(),Qt::KeepAspectRatio));
@@ -131,6 +151,7 @@ void InfoWindow::FusionPress()
 {
     f = new FusionPage(this);
 
+
     if(!selection.m_fuseable)
     {
         QMessageBox noFuse;
@@ -139,11 +160,23 @@ void InfoWindow::FusionPress()
         noFuse.setIcon(QMessageBox::Critical);
         noFuse.exec();
     }
+    else if(selection.m_treasure)
+    {
+        QMessageBox noFuse;
+        noFuse.setText("Sorry this Persona cannot be fused.");
+        noFuse.setInformativeText("This is a Treasure Demon and cannot be Reverse Fused!");
+        noFuse.setIcon(QMessageBox::Critical);
+        noFuse.exec();
+    }
     else
     {
+
         this->setCursor(Qt::WaitCursor);
+
         f->GetResultArcana(selection, SendBools());
         f->show();
+
+
         this->setCursor(Qt::ArrowCursor);
     }
 
@@ -157,7 +190,7 @@ void InfoWindow::ForwardPress()
 
     f = new FusionPage(this);
 
-    if(!selection.m_fuseable || !selection.m_spoiler)
+    if(!selection.m_fuseable)
     {
         QMessageBox noFuse;
         noFuse.setText("Sorry this Persona cannot be forward fused.");
@@ -165,11 +198,46 @@ void InfoWindow::ForwardPress()
         noFuse.setIcon(QMessageBox::Critical);
         noFuse.exec();
     }
+    else if(selection.m_treasure)
+    {
+        QMessageBox noFuse;
+        noFuse.setText("Sorry this Persona cannot be fused at this time!");
+        noFuse.setInformativeText("I haven't implemented Treasure Demons Forward Fusing yet."
+                                  "\n"
+                                  "Sorry!");
+        noFuse.setIcon(QMessageBox::Critical);
+        noFuse.exec();
+    }
     else
     {
+
+
         this->setCursor(Qt::WaitCursor);
+
+
+        QMessageBox pleaseWait;
+        pleaseWait.setInformativeText("Your Results are loading, please wait!");
+        pleaseWait.setIcon(QMessageBox::Information);
+        pleaseWait.setCursor(Qt::WaitCursor);
+        pleaseWait.setStandardButtons(0);
+        pleaseWait.setWindowTitle("Please Wait!");
+
+        pleaseWait.show();
+
+
+
+
         f->FuseForward(selection, SendBools());
         f->show();
+
+
+
+
+
+        if(f->isVisible() && pleaseWait.isVisible())
+            pleaseWait.close();
+
+
         this->setCursor(Qt::ArrowCursor);
     }
 }

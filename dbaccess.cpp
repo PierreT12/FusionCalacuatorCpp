@@ -219,17 +219,13 @@ Persona DbAccess::GetSinglePersona(QString indexName)
                     "Personas_Final.Level, "
                     "Personas_Final.Fuseable, "
                     "Personas_Final.SpecialFusion, "
-                    "Personas_Final.Max_SL "
+                    "Personas_Final.Max_SL,"
+                    "Personas_Final.Treasure"
                     "FROM Personas_Final "
                     "INNER JOIN Arcana "
                     "ON Arcana.Arcana_ID = Personas_Final.Arcana "
                     "WHERE Personas_Final.Name = ?");
     query.addBindValue(indexName);
-
-    //Looks for a Persona that matches the name of the
-    //Selected Persona in the ListView
-
-
 
     if(query.exec())
     {
@@ -247,6 +243,7 @@ Persona DbAccess::GetSinglePersona(QString indexName)
             selection.m_fuseable = query.value(3).toBool(); //Fuseable?
             selection.m_sFusion = query.value(4).toBool(); //Special Fusion?
             selection.m_maxSL = query.value(5).toBool(); //Max Social Link?
+            selection.m_treasure = query.value(6).toBool();
 
 
         }

@@ -7,6 +7,7 @@
 #include "dbaccess.h"
 
 
+
 class Fusion
 {
 public:
@@ -26,6 +27,9 @@ public:
    QStringList SpecialFusion(Persona target);
 
    QString FFCheck(Persona p1, Persona p2, bool filter);
+
+
+
 
    //Doing Queries or Math Methods
     bool SamePerArcana(Persona firstPer,
@@ -62,6 +66,7 @@ public:
 private:
     QString m_path;
     DbAccess fusionAccess;
+
 
 
 };

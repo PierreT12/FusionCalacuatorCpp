@@ -55,6 +55,7 @@ private:
     Help *h;
     QStringListModel *model;
     QItemSelectionModel *selectionModel;
+    QStringListModel* listModel;
     QStringList *list;
     QString m_path;
     DbAccess mainAccess;

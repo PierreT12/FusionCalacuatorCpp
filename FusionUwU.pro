@@ -15,6 +15,7 @@ SOURCES += \
     fusion.cpp \
     fusionpage.cpp \
     helppage.cpp \
+    loadingwindow.cpp \
     main.cpp \
     infowindow.cpp \
     persona.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     fusionpage.h \
     helppage.h \
     infowindow.h \
+    loadingwindow.h \
     persona.h \
     settings.h
 
@@ -35,6 +37,7 @@ FORMS += \
     fusionpage.ui \
     helppage.ui \
     infowindow.ui \
+    loadingwindow.ui \
     settings.ui
 
 # Default rules for deployment.

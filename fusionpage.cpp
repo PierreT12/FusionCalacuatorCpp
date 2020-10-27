@@ -45,7 +45,6 @@ void FusionPage::StartFusion(Persona result, bool filter)
     QString text;
 
 
-
     if(result.m_maxSL)
     {
         text = "This Persona requires a Max Social Link!";
@@ -63,6 +62,14 @@ void FusionPage::StartFusion(Persona result, bool filter)
 
 
     }
+    else
+        if(result.m_sFusion)
+        {
+            text = "This is a Special Fusion "
+                          "All of these Personas are required!";
+            ui->spFusion->setText(text);
+            finalResults = fusion.SpecialFusion(result);
+        }
     else
        finalResults = fusion.StartFusion(result,filter);
 

@@ -10,8 +10,7 @@
 
 #include "persona.h"
 #include "fusion.h"
-//Causes errors :{
-//#include "infowindow.h"
+
 
 namespace Ui {
 class FusionPage;
