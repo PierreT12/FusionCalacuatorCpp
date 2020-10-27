@@ -11,14 +11,11 @@ int main(int argc, char *argv[])
 {
     //UI Set up
     QApplication a(argc, argv);
-    //Sets up winodws and other variables
-    //Variables for InfoWindow
+    //Creates Info Window
     InfoWindow w;
 
-
+    //Sets Icon for all windows
     QString path = QDir::currentPath() + "/Resources/header.png";
-    qDebug() << "App path : " << path;
-    //Variables for FusionPage
     QIcon icon (path);
 
 
@@ -26,6 +23,7 @@ int main(int argc, char *argv[])
     //Icon Set up
     w.setWindowIcon(icon);
 
+    //Message Box that displays on launch
     QMessageBox m;
     m.setText("Welcome!");
     m.setInformativeText("If you’re unfamiliar with how \n"

@@ -15,8 +15,10 @@ class Settings : public QDialog
 public:
     explicit Settings(QWidget *parent = nullptr);
     ~Settings();
+//////////////////Acutal Methods///////////////////////
     bool returnSpoils();
     bool returnDLC();
+//////////////////////////////////////////////////////
 
 public slots:
     void Exit();

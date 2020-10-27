@@ -6,6 +6,7 @@ AboutPage::AboutPage(QWidget *parent) :
     ui(new Ui::AboutPage)
 {
     ui->setupUi(this);
+    //Gets rid of the Question Mark
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 

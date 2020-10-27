@@ -14,24 +14,27 @@ public:
     Fusion(Persona final);
 
 
-   //Acutal Main Fusion Methods
+////////////////////Acutal Main Fusion Methods////////////////
    QStringList StartFusion(Persona target, bool filter);
 
    QStringList StartForwardFusion(Persona p1, bool filter);
 
+   QStringList SpecialFusion(Persona target);
+////////////////////////////////////////////////////////////
+
+//////////////////Fusion Checks///////////////////////////
    QStringList FusionCheck(QList<Persona> first,
                                            QList<Persona> second,
                                            QList<int> arcanaLvls,
                                            Persona target);
 
-   QStringList SpecialFusion(Persona target);
 
    QString FFCheck(Persona p1, Persona p2, bool filter);
+/////////////////////////////////////////////////////////
 
 
 
-
-   //Doing Queries or Math Methods
+//////////Calcuations Mehtods///////////////////////
     bool SamePerArcana(Persona firstPer,
                        Persona secondPer);
 
@@ -45,9 +48,9 @@ public:
                     QStringList alreadyadded);
 
     bool MathCheck(int calcLevel,int realLevel);
+////////////////////////////////////////////////////////
 
-
-    //Rounding Methods
+////////////////////////Rounding Methods///////////////
     int RoundType(int CalcLevel,
                   bool sameArcana,
                   Persona first,
@@ -60,7 +63,7 @@ public:
                   int lvlFirst,
                   int lvlSecond,
                   QList<int> arcanaLvls);
-
+///////////////////////////////////////////////////
 
 
 private:

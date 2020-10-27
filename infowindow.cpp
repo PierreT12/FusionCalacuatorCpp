@@ -17,18 +17,17 @@ InfoWindow::InfoWindow(QWidget *parent)
     , ui(new Ui::InfoWindow)
 {
 
-    //Database default set up
+    //Database Set-Up
     m_path = QDir::currentPath() + "/Resources/final_Database_2.db";
     mainAccess.SetDatabaseName(m_path);
 
     ui->setupUi(this);
 
-    //Adds all Personas to View
-    AddToView(DataConnection());
+    //Adds all Personas to View using the default No Spoilers/DLC
+    AddToView(mainAccess.GetAllNoSpoilsDLC());
 
     //Sets up the default Stat & Weakness tables
     SetTableViews();
-
 
 
 
@@ -46,10 +45,6 @@ InfoWindow::InfoWindow(QWidget *parent)
     connect(ui->serachBox, SIGNAL(returnPressed()),this, SLOT(SearchPress()));
 
 /////////////////////////////////////////////////////////////////////////
-
-
-
-
 }
 
 InfoWindow::~InfoWindow()
@@ -58,50 +53,10 @@ InfoWindow::~InfoWindow()
 }
 
 
-
-//When the database connects for the first time
-//returns a list of all of the personas
-//with the No DLC, No Spoiler filter
-QStringList InfoWindow::DataConnection()
-{
-    QStringList list;
-    list = mainAccess.GetAllNoSpoilsDLC();
-
-    return list;
-}
-
-
-
-//Adds the DataConnection() List to the ListView
-void InfoWindow::AddToView(QStringList list)
-{
-        // Create model for list
-        model = new QStringListModel(this);
-
-        //Add Data to the model
-        model->setStringList(list);
-
-        //Attach Model to ListView
-        //So user can see the list of Personas
-        ui -> personaView ->setModel(model);
-
-
-        ui->personaView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-        //Create new Item Selection Model and ties it to the listview
-        selectionModel = ui->personaView->selectionModel();
-
-        //Takes Up/Down keys as well as clicking
-        connect(selectionModel,SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
-        this,SLOT(TheClick(QModelIndex)));
-
-
-}
-
 ////////////All of the slot methods////////////////////
 
 
-
+//Displays the Persona that the user selected
 void InfoWindow::TheClick (QModelIndex index)
 {
 
@@ -129,29 +84,33 @@ void InfoWindow::TheClick (QModelIndex index)
     QString level = QString::number(selection.m_level);
     ui -> personaLevel->setText(level);
 
-
+    //Displays Persona's Image, and keeps the Aspect ration
     ui->personaImage->setPixmap(picture.scaled(ui->personaImage->size(),Qt::KeepAspectRatio));
 
 
-
+    //Default set up for Tables
     SetTableViews();
 
 
-
+    //Gets the stat and magic info
     stats = mainAccess.GetInfoStat(selection.m_name);
     magic = mainAccess.GetInfoMagic(selection.m_name);
 
+    //Adds the data to their respective tables
     AddToUiInfo(modelTableStat,stats);
     AddToUiInfo(modelTableMagic,magic);
 
 
 }
 
+//Performs Reverse Fusion and shows Fusion Window
 void InfoWindow::FusionPress()
 {
+    //Creates new Fusion Page
     f = new FusionPage(this);
 
 
+    //Checks to see if persona is even fuseable
     if(!selection.m_fuseable)
     {
         QMessageBox noFuse;
@@ -160,6 +119,7 @@ void InfoWindow::FusionPress()
         noFuse.setIcon(QMessageBox::Critical);
         noFuse.exec();
     }
+    //Checks to see if persona is Treasure Demon
     else if(selection.m_treasure)
     {
         QMessageBox noFuse;
@@ -170,12 +130,13 @@ void InfoWindow::FusionPress()
     }
     else
     {
-
+        //Sets the cursor to wait so the user can't spam click buttons
         this->setCursor(Qt::WaitCursor);
 
+        //This gets the Arcana Pairs needed
+        //and the fusion begins
         f->GetResultArcana(selection, SendBools());
         f->show();
-
 
         this->setCursor(Qt::ArrowCursor);
     }
@@ -185,11 +146,13 @@ void InfoWindow::FusionPress()
 
 }
 
+//Performs Forward Fusion and shows Fusion Window
 void InfoWindow::ForwardPress()
 {
 
     f = new FusionPage(this);
 
+    //Checks to see if persona is even fuseable
     if(!selection.m_fuseable)
     {
         QMessageBox noFuse;
@@ -198,6 +161,7 @@ void InfoWindow::ForwardPress()
         noFuse.setIcon(QMessageBox::Critical);
         noFuse.exec();
     }
+    //Checks to see if persona is Treasure Demon
     else if(selection.m_treasure)
     {
         QMessageBox noFuse;
@@ -214,26 +178,27 @@ void InfoWindow::ForwardPress()
 
         this->setCursor(Qt::WaitCursor);
 
+        //Creates a Message Box that prevents it from going into
+        //"Not Responding" mode while the calcuations are done
 
         QMessageBox pleaseWait;
         pleaseWait.setInformativeText("Your Results are loading, please wait!");
         pleaseWait.setIcon(QMessageBox::Information);
-        pleaseWait.setCursor(Qt::WaitCursor);
-        pleaseWait.setStandardButtons(0);
         pleaseWait.setWindowTitle("Please Wait!");
 
+        //Prevents the user from closing it
+        pleaseWait.setCursor(Qt::WaitCursor);
+        pleaseWait.setStandardButtons(0);
+
+        //Cant use .exec() otherwise the next part of the method
+        //Won't start until the user closes this Message Box
         pleaseWait.show();
 
-
-
-
+        //Starts the Forward Fusion and displays the results
         f->FuseForward(selection, SendBools());
         f->show();
 
-
-
-
-
+        //Closes the MessageBox when the Fusion Page shows up
         if(f->isVisible() && pleaseWait.isVisible())
             pleaseWait.close();
 
@@ -242,6 +207,7 @@ void InfoWindow::ForwardPress()
     }
 }
 
+//Runs the Search Methods based on what filters are turned on/off
 void InfoWindow::SearchPress()
 {
     QString search = ui->serachBox->text();
@@ -259,7 +225,7 @@ void InfoWindow::SearchPress()
 
 }
 
-
+//returns the DLC bool
 bool InfoWindow::SendBools()
 {
     bool filter;
@@ -269,13 +235,13 @@ bool InfoWindow::SendBools()
     return filter;
 }
 
-
-
-//MenuBar Button Presses
+//Closes the program
 void InfoWindow::Exit()
 {
     this->close();
 }
+
+//Open Settings
 void InfoWindow::OpenSettings()
 {
 
@@ -284,35 +250,54 @@ void InfoWindow::OpenSettings()
     s->show();
 
 }
+
+//Opens About
 void InfoWindow::OpenAbout()
 {
     a = new AboutPage(this);
 
     a->show();
 }
+
+//Opens Help
 void InfoWindow::OpenHelp()
 {
     h = new Help(this);
     h->show();
 }
-void InfoWindow::GiveData()
-{
-    showspoilers = s->returnSpoils();
-    showdlc = s->returnDLC();
 
-    if(showspoilers && showdlc)
-        AddToView(mainAccess.GetAll());
-    else if(showspoilers)
-       AddToView(mainAccess.GetAllSpoils());
-    else if(showdlc)
-        AddToView(mainAccess.GetAllDLC());
-    else
-        AddToView(mainAccess.GetAllNoSpoilsDLC());
+////////////////////////////////////////////////////////
+
+/////////////////////UI Methods/////////////////////////
+
+//Adds the DataConnection() List to the ListView
+void InfoWindow::AddToView(QStringList list)
+{
+        // Create model for list
+        model = new QStringListModel(this);
+
+        //Add Data to the model
+        model->setStringList(list);
+
+        //Attach Model to ListView
+        //So user can see the list of Personas
+        ui -> personaView ->setModel(model);
+
+        //Makes sure there is no edit trigger
+        ui->personaView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+        //Create new Item Selection Model and ties it to the listview
+        selectionModel = ui->personaView->selectionModel();
+
+        //Takes Up/Down keys as well as clicking
+        connect(selectionModel,SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+        this,SLOT(TheClick(QModelIndex)));
 
 
 }
 
 
+//Sets up Default TableView for both tables
 void InfoWindow::SetTableViews()
 {
 
@@ -321,8 +306,12 @@ void InfoWindow::SetTableViews()
     QStringList statBasic;
     QStringList magicBasic;
 
+    //Row and Col values are hardcoded int because
+    //they never change unliked the fusion results
     modelTableStat = new QStandardItemModel(5,2,this);
     modelTableMagic = new QStandardItemModel(10,2,this);
+
+    //Header and Row 1 Value Creation
 
     statsHeader <<"Stat" << "Value";
 
@@ -332,15 +321,9 @@ void InfoWindow::SetTableViews()
               << "Agility"
               << "Luck";
 
-    modelTableStat->setHorizontalHeaderLabels(statsHeader);
-
-    ui ->statView ->setModel(modelTableStat);
-    AddToUi(modelTableStat, statBasic);
 
 
     magic <<"Magic" << "Value";
-    //This is just the names for right now
-    //Later will be the images
     magicBasic <<"Physical"
               << "Gun"
               <<"Fire"
@@ -352,58 +335,68 @@ void InfoWindow::SetTableViews()
               << "Bless"
               << "Curse";
 
+    //Sets Headers
+    modelTableStat->setHorizontalHeaderLabels(statsHeader);
     modelTableMagic->setHorizontalHeaderLabels(magic);
 
+    //Sets Model to their respective views
+    ui ->statView ->setModel(modelTableStat);
     ui ->magicView ->setModel(modelTableMagic);
+
+    //Actually adds the data the to Model
+    AddToUi(modelTableStat, statBasic);
     AddToUi(modelTableMagic, magicBasic);
 
-
-
-
-
-
-
-
-
 }
 
 
-void InfoWindow::AddToUi(QStandardItemModel* models,
-                         QStringList list)
+//Sets Data for each row in the first col
+void InfoWindow::AddToUi(QStandardItemModel* models,QStringList list)
 {
-
+    int col = 0;
     for(int row = 0; row < list.size(); row++)
-        {
-            int col = 0;
+    {
+        //Gets the current index
+        QModelIndex index = models -> index(row,col,QModelIndex());
 
-            QModelIndex index = models -> index(row,
-                                                col,
-                                                QModelIndex());
-
-            models->setData(index,list.at(row));
-
-        }
-
-
-
-
+        models->setData(index,list.at(row));
+    }
 }
 
 
-
-void InfoWindow::AddToUiInfo(QStandardItemModel* models,
-                             QStringList list)
+//Sets the Persona specfic info to col 2
+void InfoWindow::AddToUiInfo(QStandardItemModel* models, QStringList list)
 {
+    int col = 1;
 
     for(int row = 0; row < list.size(); row++)
-        {
-            int col = 1;
+    {
+        //Gets the current index
+        QModelIndex index = models -> index(row,col,QModelIndex());
 
-            QModelIndex index = models -> index(row,
-                                                col,
-                                                QModelIndex());
+        models->setData(index,list.at(row));
+    }
+}
 
-            models->setData(index,list.at(row));
+//////////////////////////////////////////////////////////
 
-        }
+////////////////////Other Methods/////////////////////////
+
+//Gets Data from the Settings Window
+//Displays Persons to listView based on the bools
+void InfoWindow::GiveData()
+{
+    showspoilers = s->returnSpoils();
+    showdlc = s->returnDLC();
+
+    if(showspoilers && showdlc)
+        AddToView(mainAccess.GetAll()); //DLC & Spoiler
+    else if(showspoilers)
+       AddToView(mainAccess.GetAllSpoils()); //Spoilers
+    else if(showdlc)
+        AddToView(mainAccess.GetAllDLC()); //DLC
+    else
+        AddToView(mainAccess.GetAllNoSpoilsDLC()); //No DLC & Spoiler
+
+
 }

@@ -23,11 +23,18 @@ class FusionPage : public QDialog
 public:
     explicit FusionPage(QWidget *parent = nullptr);
     ~FusionPage();
+
+///////////////////////Acutal Metods///////////////////////
    void GetResultArcana(Persona ResPersona, bool filter);
+
    void StartFusion(Persona result, bool filter);
+
    void FuseForward(Persona p1, bool filter);
+
    void DisplayAllResults(QStringList finalResults);
 
+   void Special(QString text);
+////////////////////////////////////////////////////////////
 
 
 

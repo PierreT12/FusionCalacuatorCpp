@@ -26,15 +26,22 @@ public:
 
     InfoWindow(QWidget *parent = nullptr);
     ~InfoWindow();
-    QStringList DataConnection();
+////////////////UI Methods///////////////////////////////////////
     void AddToView(QStringList list);
-    void SetTableViews();
-    void AddToUi(QStandardItemModel* models,
-                 QStringList list);
-    void AddToUiInfo(QStandardItemModel* models,
-                     QStringList list);
 
+    void SetTableViews();
+
+    void AddToUi(QStandardItemModel* models, QStringList list);
+
+    void AddToUiInfo(QStandardItemModel* models, QStringList list);
+///////////////////////////////////////////////////////////////////
+
+
+
+//////////////Other Methods///////////////////////////////////////
     bool SendBools();
+/////////////////////////////////////////////////////////////////
+
 
 private slots:
     void TheClick (QModelIndex);

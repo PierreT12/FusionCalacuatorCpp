@@ -7,8 +7,6 @@ class Persona
 {
 
 public:
-    //Testing out making all these public
-    //need to be accessed in other classes uwu
     QString m_name;
     QString m_arcana;
     int m_level;
