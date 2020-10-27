@@ -35,12 +35,12 @@ I might not do this, from what I understand, the results can be pretty random. I
   
 Inherited Skills  
 
-# Recent Changes  
-Forward Fusions  
+# Recent Changes    
 Fixed Fool Bug  
+Minor Bug Fixes
 
 # Known Bugs
-Some personas can lag the program when clicked.  
+None so far!  
 
 
 
