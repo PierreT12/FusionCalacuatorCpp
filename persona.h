@@ -16,7 +16,7 @@ public:
     bool m_fuseable;
     bool m_sFusion;
     bool m_maxSL;
-    bool m_treasure;
+    bool m_treasure = false;
 
 
 
