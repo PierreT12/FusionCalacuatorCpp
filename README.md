@@ -36,11 +36,12 @@ I might not do this, from what I understand, the results can be pretty random. I
 Inherited Skills  
 
 # Recent Changes    
-Fixed Fool Bug  
-Minor Bug Fixes
+Minor Bug Fixes  
+Added Favorites Feature
 
-# Known Bugs
-None so far!  
+# Known Bugs 
+Extra Spaces in the Favorite Lookup  
+Paths for Favorite folder is absolute still  
 
 
 
