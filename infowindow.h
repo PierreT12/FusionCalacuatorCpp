@@ -13,6 +13,7 @@
 #include "Settings.h"
 #include "aboutpage.h"
 #include "helppage.h"
+#include "favorites.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class InfoWindow; }
@@ -53,10 +54,12 @@ private slots:
     void OpenAbout();
     void OpenHelp();
     void OpenSettings();
+    void OpenFavorites();
 
 private:
     Ui::InfoWindow *ui;
     FusionPage *f;
+    favorites *fav;
     Settings *s;
     AboutPage *a;
     Help *h;

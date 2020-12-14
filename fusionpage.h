@@ -6,6 +6,13 @@
 #include <QMessageBox>
 #include <QStandardItemModel>
 #include <QDir>
+#include <QDirIterator>
+
+#include <QJsonDocument>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QJsonObject>
+
 
 
 #include "persona.h"
@@ -34,17 +41,31 @@ public:
    void DisplayAllResults(QStringList finalResults);
 
    void Special(QString text);
-////////////////////////////////////////////////////////////
+
+   void SetFavs();
+
+   //void ReadFavorites();
+
+   //QList<QJsonObject> ReadFavoritesTest();
+/////////////////////////////////////////////////////////
+
+    private slots:
+
+        void AddtoFavorites();
+
+        void DeleteFavorites();
 
 
 
-private:
-    Ui::FusionPage *ui;
-    QLabel *label;
-    Persona m_result;
-    QStandardItemModel *modelResults;
-    QString m_path;
-    DbAccess fusionAccess;
+
+    private:
+        Ui::FusionPage *ui;
+        QLabel *label;
+        Persona m_result;
+        QStringList m_finalResults;
+        QStandardItemModel *modelResults;
+        QString m_path;
+        DbAccess fusionAccess;
 
 
 };

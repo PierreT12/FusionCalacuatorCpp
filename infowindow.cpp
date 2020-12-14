@@ -41,6 +41,8 @@ InfoWindow::InfoWindow(QWidget *parent)
     connect(ui-> actionAbout, SIGNAL(triggered()), this, SLOT(OpenAbout()));
     connect(ui-> actionHelp, SIGNAL(triggered()), this, SLOT(OpenHelp()));
     connect(ui-> actionSettings, SIGNAL(triggered()), this, SLOT(OpenSettings()));
+    connect(ui->favorites, SIGNAL(clicked()), this, SLOT(OpenFavorites()));
+
         /////////Waits for Enter to be pressed/////////
     connect(ui->serachBox, SIGNAL(returnPressed()),this, SLOT(SearchPress()));
 
@@ -264,6 +266,12 @@ void InfoWindow::OpenHelp()
 {
     h = new Help(this);
     h->show();
+}
+
+void InfoWindow::OpenFavorites()
+{
+    fav = new favorites(this);
+    fav->show();
 }
 
 ////////////////////////////////////////////////////////

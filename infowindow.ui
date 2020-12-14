@@ -120,6 +120,18 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="favorites">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Favorites</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item row="3" column="11">

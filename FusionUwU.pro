@@ -12,6 +12,7 @@ CONFIG += c++11
 SOURCES += \
     aboutpage.cpp \
     dbaccess.cpp \
+    favorites.cpp \
     fusion.cpp \
     fusionpage.cpp \
     helppage.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
 HEADERS += \
     aboutpage.h \
     dbaccess.h \
+    favorites.h \
     fusion.h \
     fusionpage.h \
     helppage.h \
@@ -32,6 +34,7 @@ HEADERS += \
 
 FORMS += \
     aboutpage.ui \
+    favorites.ui \
     fusionpage.ui \
     helppage.ui \
     infowindow.ui \

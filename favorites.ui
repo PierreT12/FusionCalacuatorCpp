@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FusionPage</class>
- <widget class="QDialog" name="FusionPage">
+ <class>favorites</class>
+ <widget class="QDialog" name="favorites">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1526</width>
-    <height>1109</height>
+    <width>1387</width>
+    <height>977</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Fusion Results</string>
+   <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QTableView" name="resultView"/>
-   </item>
-   <item row="0" column="0">
+  <layout class="QFormLayout" name="formLayout_2">
+   <item row="0" column="1">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>General Information</string>
@@ -136,13 +133,6 @@
           </property>
          </spacer>
         </item>
-        <item row="7" column="0" colspan="2">
-         <widget class="QCheckBox" name="fav">
-          <property name="text">
-           <string>Add to Favorites</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
       <item>
@@ -161,6 +151,12 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QTableView" name="resultView"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QListView" name="favView"/>
    </item>
   </layout>
  </widget>
