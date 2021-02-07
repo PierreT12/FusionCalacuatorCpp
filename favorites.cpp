@@ -17,9 +17,12 @@ favorites::~favorites()
     delete ui;
 }
 
+/////Grabs the Json Files from the folder and prints it
+////out to the Favorites Window
 void favorites::GetFavs()
 {
 
+    //Keeping qDebug and my directory until feature is 100% working
 
     QStringList namesList;
     QStringList fixedList;
@@ -43,14 +46,14 @@ void favorites::GetFavs()
     ui->favView->setModel(model);
     selectionModel = ui->favView->selectionModel();
 
-    //Make Connection uwu
+    //Make Connection and calls the slot to display information
     connect(selectionModel,SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
     this,SLOT(Selection(QModelIndex)));
 
 }
 
 
-
+///Takes informatation from the selected files and displays the saved pairings
 void favorites::Selection(QModelIndex index)
 {
     listModel= qobject_cast<QStringListModel*>(ui->favView->model());
@@ -61,6 +64,7 @@ void favorites::Selection(QModelIndex index)
 
     QList<Persona> finalList;
 
+    //Json file reader
         QFile file( path );
            if( file.open( QIODevice::ReadOnly ) )
            {
@@ -69,6 +73,7 @@ void favorites::Selection(QModelIndex index)
 
                QJsonParseError jsonError;
                QJsonDocument document = QJsonDocument::fromJson( bytes, &jsonError );
+               //Error if parsing file
                if( jsonError.error != QJsonParseError::NoError )
                {
                   qDebug() << "fromJson failed: ";
@@ -106,6 +111,8 @@ void favorites::Selection(QModelIndex index)
 }
 
 
+///Same as the other displays for the standard result display
+/// Have to fix, not showing up how it should
 void favorites::DisplayFavorite(QList<Persona> finalList)
 {
     ui->perArcFLbl->setText(m_result.m_arcana);
@@ -132,41 +139,46 @@ void favorites::DisplayFavorite(QList<Persona> finalList)
     resultsHeader << "Persona" << "Arcana" << "Level"
                   << "Persona" << "Arcana" << "Level";
 
-    for(int i = 0; i < (finalList.size()/2); i++)
+    int temp = (finalList.size()/2);
+
+    for(int i = 0; i < temp - 1; i++)
     {
 
-        for(int col = 0; col < 6; col++)
-        {
+            for(int col = 0; col < 6; col++)
+            {
 
-           //Creates a new Index models and sets it to the current row(i) and col
-                                                   // Row, Col
-           QModelIndex index = modelResults -> index(i, col, QModelIndex());
-
-           switch (col)
-           {
-           case 0: // Col 1 - Persona 1: Name
-               modelResults->setData(index, finalList.at(i).m_name);
-               break;
-           case 1: //Col 2 - Persona 1: Arcana
-               modelResults->setData(index, finalList.at(i).m_arcana);
-               break;
-           case 2: //Col 3 - Persona 1: Level
-               modelResults->setData(index, finalList.at(i).m_level);
-               break;
-           case 3: // Col 4 - Persona 2: Name
-               modelResults->setData(index, finalList.at(i +1).m_name);
-               break;
-           case 4: //Col 5 - Persona 2: Arcana
-               modelResults->setData(index, finalList.at(i +1).m_arcana);
-               break;
-           case 5: //Col 6 - Persona 2: Level
-               modelResults->setData(index, finalList.at(i +1).m_level);
-               break;
+               //Creates a new Index models and sets it to the current row(i) and col
+                                                       // Row, Col
+               QModelIndex index = modelResults -> index(i, col, QModelIndex());
 
 
-           }//End of switch
-       }//End of col loop
+               switch (col)
+               {
+               case 0: // Col 1 - Persona 1: Name
+                   modelResults->setData(index, finalList.at(i).m_name);
+                   break;
+               case 1: //Col 2 - Persona 1: Arcana
+                   modelResults->setData(index, finalList.at(i).m_arcana);
+                   break;
+               case 2: //Col 3 - Persona 1: Level
+                   modelResults->setData(index, finalList.at(i).m_level);
+                   break;
+               case 3: // Col 4 - Persona 2: Name
+                   modelResults->setData(index, finalList.at(i +1).m_name);
+                   break;
+               case 4: //Col 5 - Persona 2: Arcana
+                   modelResults->setData(index, finalList.at(i +1).m_arcana);
+                   break;
+               case 5: //Col 6 - Persona 2: Level
+                   modelResults->setData(index, finalList.at(i +1).m_level);
+                   break;
+
+
+               }//End of switch
+
+           }//End of col loop
    }//End of i/row loop
+
 
 
    //Adds header and results into UI

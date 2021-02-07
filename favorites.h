@@ -33,9 +33,11 @@ public:
     explicit favorites(QWidget *parent = nullptr);
     ~favorites();
 
+////////////////////Methods for Class/////////////////////////
+
     void GetFavs();
     void DisplayFavorite(QList<Persona> finalList);
-
+////////////////////////////////////////////////////////////
 
 private slots:
     void Selection (QModelIndex);
