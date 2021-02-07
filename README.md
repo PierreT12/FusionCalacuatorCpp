@@ -43,6 +43,31 @@ Added Favorites Feature
 Extra Spaces in the Favorite Lookup  
 Paths for Favorite folder is absolute still  
 
+# Screenshots
+
+Here are some screenshots of the program in action!   
+  
+
+
+Main Screen    
+![Standard Display](https://user-images.githubusercontent.com/65751650/107161387-6b257980-696a-11eb-9bdc-75d870c2a577.PNG)  
+
+
+Reverse Fusion Results   
+![Reverse Fusion Results](https://user-images.githubusercontent.com/65751650/107161396-7aa4c280-696a-11eb-93cf-f82769912bd2.PNG)  
+
+
+Forward Fusion Results  
+![Forward Fusion Results](https://user-images.githubusercontent.com/65751650/107161403-8a240b80-696a-11eb-9758-cdcae531f3fe.PNG)  
+
+
+
+Favorite Window (WIP)   
+![Favorite Window WIP](https://user-images.githubusercontent.com/65751650/107161412-97d99100-696a-11eb-8020-c8631b20db34.PNG)  
+
+
+Help Window   
+![Help Window](https://user-images.githubusercontent.com/65751650/107161423-a7f17080-696a-11eb-806a-25aadcf63e1c.PNG)   
 
 
 
@@ -51,3 +76,4 @@ Paths for Favorite folder is absolute still
 http://www.phpsimplicity.com/heretic/  
 https://github.com/aqiu384/megaten-fusion-tool  
 https://github.com/chinhodado/persona5_calculator  
+
