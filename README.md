@@ -7,7 +7,7 @@ Because most of the logic has already been written in C#, I just took that and i
 I've put more of my time into this project rather than my C# one.  
 So please look at this one if you want to see a good repesentation of my work!      
 
-Also please I apologize in advance if I make some common mistakes in C++. I'm self taught as of right now, but I will be taking a class in Spring 2021!  
+I'm self taught as of right now, but I will be taking a class in Spring 2021! 
 
 # SQLite Database
 The database I made was too large to be uploaded to Github in its SQLite form.  
