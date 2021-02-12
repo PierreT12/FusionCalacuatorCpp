@@ -40,7 +40,7 @@ Inherited Skills
 
 # Recent Changes    
 Minor Bug Fixes  
-Added Favorites Feature
+Added Favorites Feature (Still a Work In Progress)
 
 # Known Bugs 
 Extra Spaces in the Favorite Lookup  
