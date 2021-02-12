@@ -277,7 +277,9 @@ void FusionPage::AddtoFavorites()
 
 }
 
-
+//Gets all the File Names from the favorite Dir.
+//And has the Checkboxed Checked so the user knows
+//which Personas they've already favorited
 void FusionPage::SetFavs()
 {
     QStringList namesList;
