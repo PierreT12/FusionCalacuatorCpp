@@ -4,7 +4,7 @@ A remake of my [C# Fusion Calculator](https://github.com/PierreT12/FusionCalcCSh
 This is a Personal Project that I was working on in C# but I needed to transfer over to C++ for my Graduate School Portfolio.  
 Because most of the logic has already been written in C#, I just took that and implemented it in C++ and cleaned it up. All of the information relating to Personas is stored within a SQLite Database.  
 
-I've put more of my time into this project rather than my C# one, which is really messy.  
+I've put more of my time into this project rather than my C# one.  
 So please look at this one if you want to see a good repesentation of my work!      
 
 Also please I apologize in advance if I make some common mistakes in C++. I'm self taught as of right now, but I will be taking a class in Spring 2021!  
