@@ -11,7 +11,10 @@ Also please I apologize in advance if I make some common mistakes in C++. I'm se
 
 # SQLite Database
 The database I made was too large to be uploaded to Github in its SQLite form.  
-So I exported a pictureless version to CSV pages so people can actually see what it looks like.  
+So I exported a pictureless version to CSV pages so people can actually see what it looks like.   
+
+ 
+Rather than just using Json files for the whole thing, I used a database for a few reasons. Mainly to to display how I could have it interact with my application as well as, actually creating the calcuation part of the program.   
 
 # Current Features
 
